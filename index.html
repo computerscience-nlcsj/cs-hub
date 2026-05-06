@@ -121,6 +121,20 @@ header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:200;bo
 .setup-banner p{font-size:.82rem;opacity:.88;line-height:1.6}
 .setup-banner code{background:rgba(255,255,255,.2);padding:.1rem .35rem;border-radius:4px;
   font-family:'DM Mono',monospace;font-size:.8rem}
+
+/* TOOLTIP for Notes */
+.chip-wrap{position:relative;display:inline-flex;align-items:center}
+.chip-wrap .tooltip{
+  display:none;position:absolute;bottom:calc(100% + 6px);left:50%;
+  transform:translateX(-50%);background:#1e293b;color:#f1f5f9;
+  font-size:.72rem;font-family:'DM Sans',sans-serif;font-weight:400;
+  padding:.4rem .65rem;border-radius:6px;white-space:nowrap;max-width:240px;
+  white-space:normal;line-height:1.4;z-index:999;pointer-events:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);text-align:left}
+.chip-wrap .tooltip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#1e293b}
+.chip-wrap:hover .tooltip{display:block}
 footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.75rem;
   border-top:1px solid var(--border);margin-top:2.5rem}
 @media(max-width:680px){
@@ -236,7 +250,8 @@ function buildTree(rows,teacherView){
     if(!teacherView && !show) return;
     if(!tree[yg])tree[yg]={};
     if(!tree[yg][topic])tree[yg][topic]={};
-    const res={title,link,type,show};
+    const notes=(r['Notes']||'').trim();
+    const res={title,link,type,show,notes};
     if(KS_YEARS.has(yg)){
       const les=lesson||'Resources';
       if(!tree[yg][topic][les])tree[yg][topic][les]=[];
@@ -274,7 +289,12 @@ function chipHTML(r,teacherView){
   const hidden=!r.show;
   const cls=chipClass(r.type)+(hidden&&teacherView?' chip-hidden':'');
   const badge=hidden&&teacherView?' <span class="hidden-badge">Hidden</span>':'';
-  return `<a href="${r.link}" target="_blank" rel="noopener" class="chip ${cls}">${typeIcon(r.type)} ${r.title}</a>${badge}`;
+  const note=(r.notes||'').trim();
+  const inner=`<a href="${r.link}" target="_blank" rel="noopener" class="chip ${cls}">${typeIcon(r.type)} ${r.title}</a>`;
+  if(note){
+    return `<span class="chip-wrap">${inner}<span class="tooltip">${note}</span></span>${badge}`;
+  }
+  return inner+badge;
 }
 
 function renderTopic(yg,topic,data,cfg,teacherView){
@@ -441,23 +461,7 @@ async function init(){
       const rawText=await res.text();
       rows=parseCSV(rawText);
 
-      // DEBUG
-      const d=document.createElement('div');
-      d.style.cssText='background:#1e293b;color:#a3e635;font-family:monospace;font-size:11px;padding:1rem;margin-bottom:1rem;border-radius:8px;white-space:pre-wrap;word-break:break-all';
-      const lines=rawText.split('\n');
-      const showTrue=rows.filter(r=>(r['Show to Students']||'').toUpperCase()==='TRUE'&&r['Link']).length;
-      d.textContent=[
-        'STATUS: '+res.status,
-        'BYTES: '+rawText.length,
-        'CSV HEADER: '+lines[0],
-        'CSV ROW 1:  '+(lines[1]||'EMPTY'),
-        'CSV ROW 2:  '+(lines[2]||'EMPTY'),
-        'ROWS PARSED: '+rows.length,
-        'SHOW=TRUE + HAS LINK: '+showTrue,
-        rows[0]?'KEYS: '+Object.keys(rows[0]).join(' | '):'NO ROWS',
-        rows[0]?'VALS: '+Object.values(rows[0]).slice(0,6).join(' | '):'',
-      ].join('\n');
-      document.getElementById('mainContent').insertAdjacentElement('afterbegin',d);
+
     }catch(e){
       document.getElementById('mainContent').innerHTML=`<div style="padding:3rem;text-align:center;color:var(--muted)"><strong>Could not load sheet.</strong><br>Check the CSV URL is correct and the sheet is published publicly.<br><small>${e.message}</small></div>`;
       document.getElementById('loadingScreen').style.display='none';

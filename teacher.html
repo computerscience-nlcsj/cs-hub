@@ -218,9 +218,24 @@ const YEAR_CONFIG={
   'IB':{color:'#7c3aed',tag:'IB DP',tagBg:'#ede9fe',tagCol:'#5b21b6'},
 };
 
+function normaliseHeader(h){
+  h=h.replace(/\n/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
+  if(h.includes('year group'))          return 'Year Group';
+  if(h==='topic')                        return 'Topic';
+  if(h.startsWith('subtopic'))           return 'Subtopic';
+  if(h.startsWith('lesson'))             return 'Lesson';
+  if(h.includes('resource title')||h==='title') return 'Resource Title';
+  if(h.includes('link')||h.includes('url'))     return 'Link';
+  if(h==='type')                         return 'Type';
+  if(h.includes('show'))                 return 'Show to Students';
+  if(h.includes('note'))                 return 'Notes';
+  return h;
+}
+
 function parseCSV(text){
   const lines=text.trim().split('\n');
-  const headers=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+  const rawHeaders=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+  const headers=rawHeaders.map(normaliseHeader);
   return lines.slice(1).map(line=>{
     const cols=[];let cur='',inQ=false;
     for(let c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}

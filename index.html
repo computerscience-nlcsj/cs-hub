@@ -182,24 +182,46 @@ function normaliseHeader(h){
 }
 
 function parseCSV(text){
-  const lines=text.trim().split('\n');
-  // Find the real header row — the one that contains 'Year Group' or 'Topic'
+  // First fully parse CSV respecting quoted fields (including newlines inside quotes)
+  function fullParse(txt){
+    const rows=[];
+    let row=[],cur='',inQ=false;
+    for(let i=0;i<txt.length;i++){
+      const ch=txt[i];
+      if(ch==='"'){
+        if(inQ&&txt[i+1]==='"'){cur+='"';i++;}
+        else inQ=!inQ;
+      } else if(ch===','&&!inQ){
+        row.push(cur.trim());cur='';
+      } else if((ch==='\n'||ch==='\r')&&!inQ){
+        if(ch==='\r'&&txt[i+1]==='\n')i++;
+        row.push(cur.trim());
+        rows.push(row);
+        row=[];cur='';
+      } else {
+        cur+=ch;
+      }
+    }
+    if(cur||row.length)rows.push([...row,cur.trim()]);
+    return rows;
+  }
+
+  const allRows=fullParse(text);
+
+  // Find the header row — first row where a cell contains 'year group'
   let headerIdx=0;
-  for(let i=0;i<Math.min(lines.length,10);i++){
-    const low=lines[i].toLowerCase();
-    if(low.includes('year group')||low.includes('topic')){
-      headerIdx=i;
-      break;
+  for(let i=0;i<Math.min(allRows.length,10);i++){
+    if(allRows[i].some(c=>c.toLowerCase().includes('year group'))){
+      headerIdx=i;break;
     }
   }
-  const rawHeaders=lines[headerIdx].split(',').map(h=>h.trim().replace(/^"|"$/g,'').replace(/\n/g,' ').trim());
-  const headers=rawHeaders.map(normaliseHeader);
-  return lines.slice(headerIdx+1).map(line=>{
-    const cols=[];let cur='',inQ=false;
-    for(let c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}
-    cols.push(cur.trim());
-    const row={};headers.forEach((h,i)=>row[h]=(cols[i]||'').replace(/^"|"$/g,''));
-    return row;
+
+  const headers=allRows[headerIdx].map(h=>normaliseHeader(h.replace(/\n/g,' ')));
+
+  return allRows.slice(headerIdx+1).map(row=>{
+    const r={};
+    headers.forEach((h,i)=>r[h]=(row[i]||''));
+    return r;
   }).filter(r=>r['Year Group']&&r['Topic']);
 }
 

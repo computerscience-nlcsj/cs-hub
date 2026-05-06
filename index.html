@@ -393,7 +393,7 @@ function initSearch(rows,teacherView){
 
 
 async function init(){
-  const isDemo=SHEET_CSV_URL==='https://docs.google.com/spreadsheets/d/e/2PACX-1vQVhR-gF88rl6ypPYwGkAlbK_jau3Qi9cnBHXd8eSMrMPbkxaThDD95jrBuj-wDoHRy4pQ9yrE5bP92/pub?output=csv';
+  const isDemo=SHEET_CSV_URL==='YOUR_GOOGLE_SHEET_CSV_URL_HERE';
   let rows;
   if(isDemo){
     document.getElementById('mainContent').insertAdjacentHTML('afterbegin',`
@@ -407,7 +407,28 @@ async function init(){
   } else {
     try{
       const res=await fetch(SHEET_CSV_URL+'&t='+Date.now());
-      rows=parseCSV(await res.text());
+      const rawText=await res.text();
+
+      // DEBUG PANEL — shows first 300 chars of CSV and parsed row count
+      const debugDiv=document.createElement('div');
+      debugDiv.style.cssText='background:#1e293b;color:#a3e635;font-family:monospace;font-size:11px;padding:1rem;margin-bottom:1rem;border-radius:8px;white-space:pre-wrap;word-break:break-all';
+      const firstLine=rawText.split('\n')[0];
+      const secondLine=rawText.split('\n')[1]||'(no data rows)';
+      rows=parseCSV(rawText);
+      const showCount=rows.filter(r=>(r['Show to Students']||'').toUpperCase()==='TRUE'&&r['Link']).length;
+      debugDiv.textContent=[
+        '=== CS HUB DEBUG ===',
+        'HTTP status: '+res.status,
+        'Total bytes: '+rawText.length,
+        'Header row: '+firstLine.substring(0,120),
+        'Row 1 data: '+secondLine.substring(0,120),
+        'Total rows parsed: '+rows.length,
+        'Rows with URL + Show=TRUE: '+showCount,
+        rows.length>0?'First row keys: '+Object.keys(rows[0]).join(' | '):'NO ROWS PARSED',
+        rows.length>0?'First row values: '+Object.values(rows[0]).join(' | '):'',
+      ].join('\n');
+      document.getElementById('mainContent').insertAdjacentElement('afterbegin',debugDiv);
+
     }catch(e){
       document.getElementById('mainContent').innerHTML=`<div style="padding:3rem;text-align:center;color:var(--muted)"><strong>Could not load sheet.</strong><br>Check the CSV URL is correct and the sheet is published publicly.<br><small>${e.message}</small></div>`;
       document.getElementById('loadingScreen').style.display='none';

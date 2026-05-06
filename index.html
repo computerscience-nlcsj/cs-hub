@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS Department Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#1a3a5c; --accent:#e8a020; --accent2:#2a7fc1;
+  --bg:#f0f4f8; --surface:#fff; --border:#dde3ec;
+  --text:#1c2b3a; --muted:#6b7c93; --radius:12px;
+  --shadow:0 2px 12px rgba(26,58,92,.08);
+  --shadow-lg:0 8px 32px rgba(26,58,92,.14);
+  --y5:#3b82f6;--y6:#8b5cf6;--y7:#10b981;
+  --y8:#f59e0b;--y9:#ef4444;--igcse:#0891b2;--ib:#7c3aed;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+/* HEADER */
+header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.2)}
+.header-inner{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:60px}
+.logo{font-family:'DM Serif Display',serif;font-size:1.3rem;white-space:nowrap;flex-shrink:0}
+.logo span{color:var(--accent)}
+.year-tabs{display:flex;gap:.2rem;overflow-x:auto;scrollbar-width:none;flex:1}
+.year-tabs::-webkit-scrollbar{display:none}
+.year-tab{padding:.35rem .9rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;
+  white-space:nowrap;border:none;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);
+  transition:all .18s;letter-spacing:.03em}
+.year-tab:hover{background:rgba(255,255,255,.2);color:#fff}
+.year-tab.active{background:var(--accent);color:#fff}
+.search-wrap{position:relative;flex-shrink:0}
+.search-wrap input{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:8px;color:#fff;padding:.38rem .8rem .38rem 2rem;font-size:.82rem;
+  width:180px;outline:none;font-family:'DM Sans',sans-serif;transition:background .2s}
+.search-wrap input::placeholder{color:rgba(255,255,255,.45)}
+.search-wrap input:focus{background:rgba(255,255,255,.2)}
+.search-icon{position:absolute;left:.55rem;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;stroke:rgba(255,255,255,.55);fill:none;stroke-width:2;stroke-linecap:round}
+/* MAIN */
+.main{max-width:1400px;margin:0 auto;padding:1.75rem 1.5rem}
+.year-section{display:none}.year-section.active{display:block}
+.year-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1.5rem;
+  padding-bottom:1rem;border-bottom:2px solid var(--border)}
+.year-badge{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--primary)}
+.year-tag{font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:20px;
+  letter-spacing:.07em;text-transform:uppercase}
+.stats{margin-left:auto;font-size:.75rem;color:var(--muted);font-family:'DM Mono',monospace}
+/* TOPIC GRID */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.1rem}
+/* TOPIC CARD */
+.topic-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);
+  border:1px solid var(--border);overflow:hidden;transition:box-shadow .2s,transform .2s}
+.topic-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.topic-card-header{padding:.85rem 1rem;display:flex;align-items:center;gap:.6rem;
+  border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.topic-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.topic-title{font-weight:600;font-size:.92rem;flex:1;color:var(--text)}
+.topic-count{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap}
+.chevron{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;
+  stroke-linecap:round;transition:transform .2s;flex-shrink:0}
+.topic-card.open .chevron{transform:rotate(180deg)}
+.topic-body{display:none}.topic-card.open .topic-body{display:block}
+/* LESSON GROUPS (Y5-9) */
+.lesson-group{border-bottom:1px solid var(--border)}
+.lesson-group:last-child{border-bottom:none}
+.lesson-header{padding:.55rem 1rem;display:flex;align-items:center;gap:.5rem;
+  cursor:pointer;user-select:none;background:#fafbfd;transition:background .15s}
+.lesson-header:hover{background:#f0f4f8}
+.lesson-title{font-size:.8rem;font-weight:500;color:var(--text);flex:1}
+.lesson-chevron{width:13px;height:13px;stroke:var(--muted);fill:none;stroke-width:2;
+  stroke-linecap:round;transition:transform .15s;flex-shrink:0}
+.lesson-group.open .lesson-chevron{transform:rotate(180deg)}
+.lesson-resources{display:none;padding:.5rem 1rem .6rem;flex-wrap:wrap;gap:.35rem}
+.lesson-group.open .lesson-resources{display:flex}
+/* SUBTOPIC SECTIONS (iGCSE/IB) */
+.subtopic-section{border-bottom:1px solid var(--border)}
+.subtopic-section:last-child{border-bottom:none}
+.subtopic-label{padding:.5rem 1rem;font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);background:#fafbfd;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.5rem}
+.subtopic-body{padding:.25rem 0}
+/* LESSON WITHIN SUBTOPIC (iGCSE/IB) */
+.sub-lesson{padding:.35rem 1rem .35rem 1.5rem}
+.sub-lesson-label{font-size:.74rem;color:var(--text);font-weight:500;margin-bottom:.3rem}
+.sub-lesson-resources{display:flex;flex-wrap:wrap;gap:.3rem}
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;gap:.28rem;padding:.26rem .6rem;border-radius:6px;
+  font-size:.73rem;font-weight:500;text-decoration:none;transition:opacity .15s,transform .15s;
+  border:1px solid transparent}
+.chip:hover{opacity:.82;transform:translateY(-1px)}
+.chip svg{width:11px;height:11px;flex-shrink:0}
+.chip-video{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+.chip-slides{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+.chip-doc{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.chip-quiz{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.chip-worksheet{background:#fffbeb;color:#b45309;border-color:#fde68a}
+.chip-code{background:#f0f9ff;color:#0369a1;border-color:#bae6fd}
+.chip-link{background:#faf5ff;color:#7e22ce;border-color:#e9d5ff}
+.chip-other{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
+.chip-hidden{opacity:.45;border-style:dashed}
+.hidden-badge{font-size:.63rem;background:#fef3c7;color:#92400e;padding:.1rem .35rem;
+  border-radius:4px;font-weight:600;border:1px solid #fde68a;white-space:nowrap}
+/* SEARCH */
+.search-results{display:none}.search-results.active{display:block}
+.sr-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:.7rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.sr-meta{font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace}
+/* LOADING */
+.loading-screen{display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:60vh;gap:1rem;color:var(--muted)}
+.spinner{width:34px;height:34px;border:3px solid var(--border);
+  border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* SETUP BANNER */
+.setup-banner{background:linear-gradient(135deg,var(--primary),var(--accent2));color:#fff;
+  border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.75rem;
+  display:flex;gap:1rem;align-items:flex-start}
+.setup-banner h2{font-size:.95rem;font-weight:600;margin-bottom:.25rem}
+.setup-banner p{font-size:.82rem;opacity:.88;line-height:1.6}
+.setup-banner code{background:rgba(255,255,255,.2);padding:.1rem .35rem;border-radius:4px;
+  font-family:'DM Mono',monospace;font-size:.8rem}
+footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.75rem;
+  border-top:1px solid var(--border);margin-top:2.5rem}
+@media(max-width:680px){
+  .main{padding:1rem}
+  .topic-grid{grid-template-columns:1fr}
+  .search-wrap input{width:130px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="logo">CS<span>Hub</span></div>
+    <nav class="year-tabs" id="yearTabs"></nav>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search resources…">
+    </div>
+  </div>
+</header>
+<div class="main" id="mainContent">
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <div>Loading resources…</div>
+  </div>
+</div>
+<footer>CS Department Hub &nbsp;·&nbsp; <span id="lastUpdated"></span></footer>
+<script>
+// ═══════════════════════════════════════════
+// CONFIGURATION — paste your Sheet CSV URL here
+const SHEET_CSV_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE';
+// ═══════════════════════════════════════════
+
+
+const YEAR_ORDER=['Year 5','Year 6','Year 7','Year 8','Year 9','iGCSE','IB'];
+const KS_YEARS=new Set(['Year 5','Year 6','Year 7','Year 8','Year 9']);
+const YEAR_CONFIG={
+  'Year 5':{color:'#3b82f6',tag:'KS2',tagBg:'#dbeafe',tagCol:'#1d4ed8'},
+  'Year 6':{color:'#8b5cf6',tag:'KS2',tagBg:'#ede9fe',tagCol:'#6d28d9'},
+  'Year 7':{color:'#10b981',tag:'KS3',tagBg:'#d1fae5',tagCol:'#065f46'},
+  'Year 8':{color:'#f59e0b',tag:'KS3',tagBg:'#fef3c7',tagCol:'#92400e'},
+  'Year 9':{color:'#ef4444',tag:'KS3',tagBg:'#fee2e2',tagCol:'#991b1b'},
+  'iGCSE':{color:'#0891b2',tag:'iGCSE',tagBg:'#cffafe',tagCol:'#155e75'},
+  'IB':{color:'#7c3aed',tag:'IB DP',tagBg:'#ede9fe',tagCol:'#5b21b6'},
+};
+
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  const headers=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).map(line=>{
+    const cols=[];let cur='',inQ=false;
+    for(let c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}
+    cols.push(cur.trim());
+    const row={};headers.forEach((h,i)=>row[h]=(cols[i]||'').replace(/^"|"$/g,''));
+    return row;
+  }).filter(r=>r['Year Group']&&r['Topic']);
+}
+
+function buildTree(rows,teacherView){
+  const tree={};
+  rows.forEach(r=>{
+    const yg=r['Year Group'],topic=r['Topic'],sub=r['Subtopic']||'',
+      lesson=r['Lesson']||'',title=r['Resource Title'],link=r['Link'],
+      type=r['Type']||'Link',
+      show=(r['Show to Students']||'').replace(/^"|"$/g,'').toUpperCase()==='TRUE';
+    if(!title||!link||link==='#') return;
+    if(!teacherView && !show) return;
+    if(!tree[yg])tree[yg]={};
+    if(!tree[yg][topic])tree[yg][topic]={};
+    const res={title,link,type,show};
+    if(KS_YEARS.has(yg)){
+      const les=lesson||'Resources';
+      if(!tree[yg][topic][les])tree[yg][topic][les]=[];
+      tree[yg][topic][les].push(res);
+    } else {
+      const s=sub||'General';
+      if(!tree[yg][topic][s])tree[yg][topic][s]={};
+      const les=lesson||s;
+      if(!tree[yg][topic][s][les])tree[yg][topic][s][les]=[];
+      tree[yg][topic][s][les].push(res);
+    }
+  });
+  return tree;
+}
+
+function chipClass(t){
+  const m={video:'chip-video',slides:'chip-slides',ppt:'chip-slides',
+    doc:'chip-doc',document:'chip-doc',quiz:'chip-quiz',
+    worksheet:'chip-worksheet',code:'chip-code',link:'chip-link'};
+  return m[(t||'').toLowerCase()]||'chip-other';
+}
+function typeIcon(t){
+  const k=(t||'').toLowerCase();
+  if(k==='video')return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+  if(k==='slides'||k==='ppt')return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`;
+  if(k==='doc'||k==='document')return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+  if(k==='quiz')return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>`;
+  if(k==='worksheet')return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>`;
+  if(k==='code')return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`;
+  return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>`;
+}
+function slug(s){return(s||'').replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,60);}
+
+function chipHTML(r,teacherView){
+  const hidden=!r.show;
+  const cls=chipClass(r.type)+(hidden&&teacherView?' chip-hidden':'');
+  const badge=hidden&&teacherView?' <span class="hidden-badge">Hidden</span>':'';
+  return `<a href="${r.link}" target="_blank" rel="noopener" class="chip ${cls}">${typeIcon(r.type)} ${r.title}</a>${badge}`;
+}
+
+function renderTopic(yg,topic,data,cfg,teacherView){
+  const ks=KS_YEARS.has(yg);
+  const card=document.createElement('div');
+  card.className='topic-card';
+  let rc=0,bodyHTML='';
+
+  if(ks){
+    // Y5-9: topic → lesson → chips
+    Object.entries(data).forEach(([lesson,resources])=>{
+      rc+=resources.length;
+      const id='lg_'+slug(yg+topic+lesson);
+      bodyHTML+=`<div class="lesson-group" id="${id}">
+        <div class="lesson-header" onclick="toggleLesson('${id}')">
+          <span class="lesson-title">${lesson}</span>
+          ${teacherView?`<span style="font-size:.65rem;color:var(--muted)">${resources.filter(r=>!r.show).length||''}</span>`:''}
+          <svg class="lesson-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="lesson-resources">
+          ${resources.map(r=>chipHTML(r,teacherView)).join(' ')||'<span style="font-size:.75rem;color:var(--muted)">No resources yet</span>'}
+        </div>
+      </div>`;
+    });
+  } else {
+    // iGCSE/IB: topic → subtopic → lesson → chips
+    Object.entries(data).forEach(([sub,lessons])=>{
+      const subResCount=Object.values(lessons).flat().length;
+      rc+=subResCount;
+      bodyHTML+=`<div class="subtopic-section">
+        <div class="subtopic-label">${sub}</div>
+        <div class="subtopic-body">`;
+      Object.entries(lessons).forEach(([lesson,resources])=>{
+        bodyHTML+=`<div class="sub-lesson">
+          <div class="sub-lesson-label">${lesson}</div>
+          <div class="sub-lesson-resources">
+            ${resources.map(r=>chipHTML(r,teacherView)).join(' ')||'<span style="font-size:.72rem;color:var(--muted)">No resources yet</span>'}
+          </div>
+        </div>`;
+      });
+      bodyHTML+=`</div></div>`;
+    });
+  }
+
+  card.innerHTML=`<div class="topic-card-header">
+    <div class="topic-dot" style="background:${cfg.color}"></div>
+    <div class="topic-title">${topic}</div>
+    <div class="topic-count">${rc} resources</div>
+    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div><div class="topic-body">${bodyHTML||'<div style="padding:.75rem 1rem;font-size:.8rem;color:var(--muted)">No resources yet — add some in the Google Sheet</div>'}</div>`;
+  card.querySelector('.topic-card-header').addEventListener('click',()=>card.classList.toggle('open'));
+  return card;
+}
+
+function renderSite(rows, teacherView, containerId, tabsId){
+  const main=document.getElementById(containerId);
+  const tabsEl=document.getElementById(tabsId);
+  if(!main||!tabsEl) return;
+
+  const srDiv=document.createElement('div');
+  srDiv.className='search-results';srDiv.id='searchResults';
+  main.appendChild(srDiv);
+
+  const tree=buildTree(rows,teacherView);
+  const yearsPresent=YEAR_ORDER.filter(y=>tree[y]);
+  if(!yearsPresent.length){
+    main.innerHTML+='<div style="padding:3rem;text-align:center;color:var(--muted)">No resources found. Check your Google Sheet URL and that resources have URLs.</div>';
+    return;
+  }
+
+  yearsPresent.forEach((yg,i)=>{
+    const btn=document.createElement('button');
+    btn.className='year-tab'+(i===0?' active':'');
+    btn.textContent=yg;btn.dataset.year=yg;
+    btn.addEventListener('click',()=>switchYear(yg));
+    tabsEl.appendChild(btn);
+  });
+
+  yearsPresent.forEach((yg,i)=>{
+    const cfg=YEAR_CONFIG[yg]||{color:'#64748b',tag:'',tagBg:'#f1f5f9',tagCol:'#475569'};
+    const topics=tree[yg];
+    const topicCount=Object.keys(topics).length;
+    const resCount=rows.filter(r=>r['Year Group']===yg&&r['Link']&&r['Link']!=='#'&&(teacherView||(r['Show to Students']||'').toUpperCase()==='TRUE')).length;
+    const hiddenCount=teacherView?rows.filter(r=>r['Year Group']===yg&&(r['Show to Students']||'').toUpperCase()!=='TRUE'&&r['Link']&&r['Link']!=='#').length:0;
+
+    const sec=document.createElement('div');
+    sec.className='year-section'+(i===0?' active':'');
+    sec.id='sec_'+slug(yg);
+    sec.innerHTML=`<div class="year-header">
+      <div class="year-badge">${yg}</div>
+      ${cfg.tag?`<span class="year-tag" style="background:${cfg.tagBg};color:${cfg.tagCol}">${cfg.tag}</span>`:''}
+      ${teacherView?`<span style="font-size:.72rem;background:#dcfce7;color:#15803d;padding:.2rem .6rem;border-radius:12px;font-weight:600">STAFF VIEW</span>`:''}
+      <div class="stats">${topicCount} topics · ${resCount} resources${teacherView&&hiddenCount?` · <span style="color:#b45309">${hiddenCount} hidden</span>`:''}
+      </div>
+    </div>
+    <div class="topic-grid" id="grid_${slug(yg)}"></div>`;
+    main.appendChild(sec);
+
+    const grid=sec.querySelector('.topic-grid');
+    Object.entries(topics).forEach(([topic,data])=>{
+      grid.appendChild(renderTopic(yg,topic,data,cfg,teacherView));
+    });
+  });
+
+  // Open first card + first lesson in each year
+  document.querySelectorAll('.topic-card:first-child').forEach(c=>{
+    c.classList.add('open');
+    c.querySelectorAll('.lesson-group:first-child').forEach(l=>l.classList.add('open'));
+  });
+
+  document.getElementById('lastUpdated').textContent='Loaded: '+new Date().toLocaleString();
+}
+
+function toggleLesson(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
+
+function switchYear(yg){
+  document.querySelectorAll('.year-tab').forEach(t=>t.classList.toggle('active',t.dataset.year===yg));
+  document.querySelectorAll('.year-section').forEach(s=>s.classList.toggle('active',s.id==='sec_'+slug(yg)));
+  document.getElementById('searchResults').classList.remove('active');
+  document.getElementById('searchInput').value='';
+}
+
+function initSearch(rows,teacherView){
+  document.getElementById('searchInput').addEventListener('input',function(){
+    const q=this.value.trim().toLowerCase();
+    const sr=document.getElementById('searchResults');
+    if(!q){sr.classList.remove('active');return;}
+    sr.classList.add('active');
+    const hits=rows.filter(r=>{
+      if(!teacherView&&(r['Show to Students']||'').toUpperCase()!=='TRUE') return false;
+      if(!r['Link']||r['Link']==='#') return false;
+      return ['Resource Title','Topic','Subtopic','Lesson','Year Group']
+        .some(k=>(r[k]||'').toLowerCase().includes(q));
+    });
+    if(!hits.length){sr.innerHTML='<div style="padding:2rem;text-align:center;color:var(--muted)">No results</div>';return;}
+    sr.innerHTML=`<div style="margin-bottom:1rem;font-size:.82rem;color:var(--muted)">${hits.length} result${hits.length!==1?'s':''} for "<strong>${q}</strong>"</div>`+
+      hits.map(r=>{
+        const hidden=teacherView&&(r['Show to Students']||'').toUpperCase()!=='TRUE';
+        return`<div class="sr-item">
+          <a href="${r['Link']}" target="_blank" rel="noopener" class="chip ${chipClass(r['Type'])}${hidden?' chip-hidden':''}">${typeIcon(r['Type'])} ${r['Resource Title']}</a>
+          ${hidden?'<span class="hidden-badge">Hidden</span>':''}
+          <div class="sr-meta">${r['Year Group']} · ${r['Topic']}${r['Subtopic']?' · '+r['Subtopic']:''}${r['Lesson']?' · '+r['Lesson']:''}</div>
+        </div>`;
+      }).join('');
+  });
+}
+
+
+async function init(){
+  const isDemo=SHEET_CSV_URL==='YOUR_GOOGLE_SHEET_CSV_URL_HERE';
+  let rows;
+  if(isDemo){
+    document.getElementById('mainContent').insertAdjacentHTML('afterbegin',`
+      <div class="setup-banner">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div><h2>Connect Your Google Sheet</h2>
+        <p>Open this HTML file in a text editor and replace <code>YOUR_GOOGLE_SHEET_CSV_URL_HERE</code> with your published Google Sheet CSV URL.<br>
+        <strong>In Google Sheets:</strong> File → Share → Publish to web → Resources sheet → CSV → Publish → Copy URL.</p></div>
+      </div>`);
+    rows=[];
+  } else {
+    try{
+      const res=await fetch(SHEET_CSV_URL+'&t='+Date.now());
+      rows=parseCSV(await res.text());
+    }catch(e){
+      document.getElementById('mainContent').innerHTML=`<div style="padding:3rem;text-align:center;color:var(--muted)"><strong>Could not load sheet.</strong><br>Check the CSV URL is correct and the sheet is published publicly.<br><small>${e.message}</small></div>`;
+      document.getElementById('loadingScreen').style.display='none';
+      return;
+    }
+  }
+  document.getElementById('loadingScreen').style.display='none';
+  renderSite(rows,false,'mainContent','yearTabs');
+  initSearch(rows,false);
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>

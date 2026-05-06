@@ -20,11 +20,10 @@
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 /* HEADER */
 header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.2)}
-.header-inner{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:60px}
+.header-inner{max-width:1400px;margin:0 auto;padding:.5rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;min-height:60px}
 .logo{font-family:'DM Serif Display',serif;font-size:1.3rem;white-space:nowrap;flex-shrink:0}
 .logo span{color:var(--accent)}
-.year-tabs{display:flex;gap:.2rem;overflow-x:auto;scrollbar-width:none;flex:1}
-.year-tabs::-webkit-scrollbar{display:none}
+.year-tabs{display:flex;gap:.2rem;flex-wrap:wrap;flex:1;padding:.4rem 0}
 .year-tab{padding:.35rem .9rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;
   white-space:nowrap;border:none;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);
   transition:all .18s;letter-spacing:.03em}
@@ -74,13 +73,19 @@ header{background:var(--primary);color:#fff;position:sticky;top:0;z-index:200;bo
 .lesson-group.open .lesson-chevron{transform:rotate(180deg)}
 .lesson-resources{display:none;padding:.5rem 1rem .6rem;flex-wrap:wrap;gap:.35rem}
 .lesson-group.open .lesson-resources{display:flex}
-/* SUBTOPIC SECTIONS (iGCSE/IB) */
+/* SUBTOPIC SECTIONS (iGCSE/IB) — collapsible */
 .subtopic-section{border-bottom:1px solid var(--border)}
 .subtopic-section:last-child{border-bottom:none}
-.subtopic-label{padding:.5rem 1rem;font-size:.72rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:.06em;color:var(--muted);background:#fafbfd;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:.5rem}
-.subtopic-body{padding:.25rem 0}
+.subtopic-label{padding:.55rem 1rem;font-size:.78rem;font-weight:600;
+  color:var(--text);background:#fafbfd;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none;
+  transition:background .15s}
+.subtopic-label:hover{background:#f0f4f8}
+.subtopic-label .sub-chevron{width:13px;height:13px;stroke:var(--muted);fill:none;
+  stroke-width:2;stroke-linecap:round;transition:transform .15s;margin-left:auto;flex-shrink:0}
+.subtopic-section.open .sub-chevron{transform:rotate(180deg)}
+.subtopic-body{display:none;padding:.25rem 0}
+.subtopic-section.open .subtopic-body{display:block}
 /* LESSON WITHIN SUBTOPIC (iGCSE/IB) */
 .sub-lesson{padding:.35rem 1rem .35rem 1.5rem}
 .sub-lesson-label{font-size:.74rem;color:var(--text);font-weight:500;margin-bottom:.3rem}
@@ -140,7 +145,10 @@ footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.75rem;
 @media(max-width:680px){
   .main{padding:1rem}
   .topic-grid{grid-template-columns:1fr}
-  .search-wrap input{width:130px}
+  .search-wrap{width:100%}
+  .search-wrap input{width:100%}
+  .header-inner{padding:.5rem 1rem}
+  .logo{font-size:1.1rem}
 }
 </style>
 </head>
@@ -324,8 +332,12 @@ function renderTopic(yg,topic,data,cfg,teacherView){
     Object.entries(data).forEach(([sub,lessons])=>{
       const subResCount=Object.values(lessons).flat().length;
       rc+=subResCount;
-      bodyHTML+=`<div class="subtopic-section">
-        <div class="subtopic-label">${sub}</div>
+      const subId='sub_'+slug(yg+topic+sub);
+      bodyHTML+=`<div class="subtopic-section" id="${subId}">
+        <div class="subtopic-label" onclick="toggleSub('${subId}')">
+          ${sub}
+          <svg class="sub-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
         <div class="subtopic-body">`;
       Object.entries(lessons).forEach(([lesson,resources])=>{
         bodyHTML+=`<div class="sub-lesson">
@@ -403,12 +415,14 @@ function renderSite(rows, teacherView, containerId, tabsId){
   document.querySelectorAll('.topic-card:first-child').forEach(c=>{
     c.classList.add('open');
     c.querySelectorAll('.lesson-group:first-child').forEach(l=>l.classList.add('open'));
+    c.querySelectorAll('.subtopic-section:first-child').forEach(s=>s.classList.add('open'));
   });
 
   document.getElementById('lastUpdated').textContent='Loaded: '+new Date().toLocaleString();
 }
 
 function toggleLesson(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function toggleSub(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
 
 function switchYear(yg){
   document.querySelectorAll('.year-tab').forEach(t=>t.classList.toggle('active',t.dataset.year===yg));

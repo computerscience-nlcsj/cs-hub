@@ -234,9 +234,18 @@ function normaliseHeader(h){
 
 function parseCSV(text){
   const lines=text.trim().split('\n');
-  const rawHeaders=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+  // Find the real header row — the one that contains 'Year Group' or 'Topic'
+  let headerIdx=0;
+  for(let i=0;i<Math.min(lines.length,10);i++){
+    const low=lines[i].toLowerCase();
+    if(low.includes('year group')||low.includes('topic')){
+      headerIdx=i;
+      break;
+    }
+  }
+  const rawHeaders=lines[headerIdx].split(',').map(h=>h.trim().replace(/^"|"$/g,'').replace(/\n/g,' ').trim());
   const headers=rawHeaders.map(normaliseHeader);
-  return lines.slice(1).map(line=>{
+  return lines.slice(headerIdx+1).map(line=>{
     const cols=[];let cur='',inQ=false;
     for(let c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}
     cols.push(cur.trim());
@@ -251,7 +260,7 @@ function buildTree(rows,teacherView){
     const yg=r['Year Group'],topic=r['Topic'],sub=r['Subtopic']||'',
       lesson=r['Lesson']||'',title=r['Resource Title'],link=r['Link'],
       type=r['Type']||'Link',
-      show=(r['Show to Students']||'').replace(/^"|"$/g,'').toUpperCase()==='TRUE';
+      show=/^(true|yes|1)$/i.test((r['Show to Students']||'').replace(/^"|"$/g,'').trim());
     if(!title||!link||link==='#') return;
     if(!teacherView && !show) return;
     if(!tree[yg])tree[yg]={};

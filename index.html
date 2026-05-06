@@ -183,9 +183,18 @@ function normaliseHeader(h){
 
 function parseCSV(text){
   const lines=text.trim().split('\n');
-  const rawHeaders=lines[0].split(',').map(h=>h.trim().replace(/^"|"$/g,''));
+  // Find the real header row — the one that contains 'Year Group' or 'Topic'
+  let headerIdx=0;
+  for(let i=0;i<Math.min(lines.length,10);i++){
+    const low=lines[i].toLowerCase();
+    if(low.includes('year group')||low.includes('topic')){
+      headerIdx=i;
+      break;
+    }
+  }
+  const rawHeaders=lines[headerIdx].split(',').map(h=>h.trim().replace(/^"|"$/g,'').replace(/\n/g,' ').trim());
   const headers=rawHeaders.map(normaliseHeader);
-  return lines.slice(1).map(line=>{
+  return lines.slice(headerIdx+1).map(line=>{
     const cols=[];let cur='',inQ=false;
     for(let c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}
     cols.push(cur.trim());
@@ -200,7 +209,7 @@ function buildTree(rows,teacherView){
     const yg=r['Year Group'],topic=r['Topic'],sub=r['Subtopic']||'',
       lesson=r['Lesson']||'',title=r['Resource Title'],link=r['Link'],
       type=r['Type']||'Link',
-      show=(r['Show to Students']||'').replace(/^"|"$/g,'').toUpperCase()==='TRUE';
+      show=/^(true|yes|1)$/i.test((r['Show to Students']||'').replace(/^"|"$/g,'').trim());
     if(!title||!link||link==='#') return;
     if(!teacherView && !show) return;
     if(!tree[yg])tree[yg]={};
@@ -409,6 +418,24 @@ async function init(){
       const res=await fetch(SHEET_CSV_URL+'&t='+Date.now());
       const rawText=await res.text();
       rows=parseCSV(rawText);
+
+      // DEBUG
+      const d=document.createElement('div');
+      d.style.cssText='background:#1e293b;color:#a3e635;font-family:monospace;font-size:11px;padding:1rem;margin-bottom:1rem;border-radius:8px;white-space:pre-wrap;word-break:break-all';
+      const lines=rawText.split('\n');
+      const showTrue=rows.filter(r=>(r['Show to Students']||'').toUpperCase()==='TRUE'&&r['Link']).length;
+      d.textContent=[
+        'STATUS: '+res.status,
+        'BYTES: '+rawText.length,
+        'CSV HEADER: '+lines[0],
+        'CSV ROW 1:  '+(lines[1]||'EMPTY'),
+        'CSV ROW 2:  '+(lines[2]||'EMPTY'),
+        'ROWS PARSED: '+rows.length,
+        'SHOW=TRUE + HAS LINK: '+showTrue,
+        rows[0]?'KEYS: '+Object.keys(rows[0]).join(' | '):'NO ROWS',
+        rows[0]?'VALS: '+Object.values(rows[0]).slice(0,6).join(' | '):'',
+      ].join('\n');
+      document.getElementById('mainContent').insertAdjacentElement('afterbegin',d);
     }catch(e){
       document.getElementById('mainContent').innerHTML=`<div style="padding:3rem;text-align:center;color:var(--muted)"><strong>Could not load sheet.</strong><br>Check the CSV URL is correct and the sheet is published publicly.<br><small>${e.message}</small></div>`;
       document.getElementById('loadingScreen').style.display='none';

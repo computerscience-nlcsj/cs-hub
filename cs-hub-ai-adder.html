@@ -413,9 +413,6 @@ async function analyse() {
     return;
   }
 
-
-
-  currentUrl = url;
   hideError();
   showResult(false);
   document.getElementById('analyseBtn').disabled = true;
@@ -426,50 +423,36 @@ async function analyse() {
   thinkingEl.classList.add('active');
   stepsEl.innerHTML = '';
 
-  const steps = [
-    'Reading the URL...',
-    'Analysing page content...',
-    'Matching to curriculum topics...',
-    'Generating suggestion...',
-  ];
-
+  const steps = ['Reading the URL...', 'Matching to curriculum...', 'Generating suggestion...'];
   for (let i = 0; i < steps.length; i++) {
-    await new Promise(r => setTimeout(r, 600 * i));
+    await new Promise(r => setTimeout(r, 700 * i));
     const s = document.createElement('div');
     s.className = 'think-step';
-    s.style.animationDelay = '0s';
     s.textContent = steps[i];
     stepsEl.appendChild(s);
   }
 
   try {
-    // Call Claude via Anthropic API
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'analyse', url }),
-      mode: 'no-cors'
-    });
+    // Call Apps Script via GET — fully readable response, no CORS issues
+    const apiUrl = GOOGLE_SCRIPT_URL + '?action=analyse&url=' + encodeURIComponent(url);
+    const response = await fetch(apiUrl);
 
-    // Use GET so we can read the response (no-cors blocks POST response reading)
-    const getResponse = await fetch(GOOGLE_SCRIPT_URL + '?action=analyse&url=' + encodeURIComponent(url));
-    const data = await getResponse.json();
+    if (!response.ok) throw new Error('Server returned ' + response.status);
 
-    if (data.status === 'error') {
-      throw new Error(data.message || 'Apps Script error');
-    }
+    const data = await response.json();
+
+    if (data.status === 'error') throw new Error(data.message || 'AI error');
 
     const result = data.result;
-    if (!result) throw new Error('No result returned from AI');
+    if (!result) throw new Error('No result from AI — check Apps Script logs');
 
-    // Parse JSON response
     thinkingEl.classList.remove('active');
     populateResult(result, url);
 
   } catch (err) {
     thinkingEl.classList.remove('active');
-    showError('Error: ' + err.message);
     document.getElementById('analyseBtn').disabled = false;
+    showError('Error: ' + err.message + '. Make sure your Apps Script is deployed as a Web App with access set to Anyone.');
   }
 }
 
@@ -500,27 +483,19 @@ function populateResult(result, url) {
 
 async function addToSheet() {
   const row = {
-    yearGroup:  document.getElementById('fYearGroup').value,
-    topic:      document.getElementById('fTopic').value.trim(),
-    subtopic:   document.getElementById('fSubtopic').value.trim(),
-    lesson:     document.getElementById('fLesson').value.trim(),
-    title:      document.getElementById('fTitle').value.trim(),
-    link:       document.getElementById('fLink').value.trim(),
-    type:       document.getElementById('fType').value,
-    show:       document.getElementById('fShow').value,
-    notes:      document.getElementById('fNotes').value.trim(),
+    yearGroup: document.getElementById('fYearGroup').value,
+    topic:     document.getElementById('fTopic').value.trim(),
+    subtopic:  document.getElementById('fSubtopic').value.trim(),
+    lesson:    document.getElementById('fLesson').value.trim(),
+    title:     document.getElementById('fTitle').value.trim(),
+    link:      document.getElementById('fLink').value.trim(),
+    type:      document.getElementById('fType').value,
+    show:      document.getElementById('fShow').value,
+    notes:     document.getElementById('fNotes').value.trim(),
   };
 
   if (!row.title || !row.link || !row.yearGroup || !row.topic) {
     showError('Please fill in at least Year Group, Topic, Title and Link.');
-    return;
-  }
-
-  if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
-    // Demo mode — show what would be added
-    addToHistory(row, 'added');
-    showToast('✅ Added! (Demo mode — configure GOOGLE_SCRIPT_URL to write to sheet)', 'success');
-    resetForm();
     return;
   }
 
@@ -529,14 +504,15 @@ async function addToSheet() {
     btn.disabled = true;
     btn.textContent = 'Adding…';
 
-    const payload = {...row, action: 'addRow'};
-    const res = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      mode: 'no-cors',
-    });
-    // no-cors means we can't read response, but if no error was thrown it worked
+    // Encode row data as URL params for GET request (avoids CORS issues)
+    const params = new URLSearchParams({action: 'addRow', ...row}).toString();
+    const response = await fetch(GOOGLE_SCRIPT_URL + '?' + params);
+
+    if (!response.ok) throw new Error('Server returned ' + response.status);
+
+    const data = await response.json();
+    if (data.status === 'error') throw new Error(data.message);
+
     addToHistory(row, 'added');
     showToast('✅ Added to your Google Sheet!', 'success');
     resetForm();

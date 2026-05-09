@@ -172,7 +172,7 @@ header { background: var(--navy); color: #fff; padding: 0 2rem; box-shadow: 0 2p
 .error-box {
   background: var(--redBg); border: 1px solid #fecaca; border-radius: 8px;
   padding: .85rem 1rem; font-size: .83rem; color: var(--red); display: none;
-  margin-top: .75rem; line-height: 1.5;
+  margin-top: .75rem; line-height: 1.5; word-break: break-all;
 }
 .error-box.visible { display: block; }
 
@@ -433,26 +433,31 @@ async function analyse() {
   }
 
   try {
-    // Call Apps Script via GET — fully readable response, no CORS issues
     const apiUrl = GOOGLE_SCRIPT_URL + '?action=analyse&url=' + encodeURIComponent(url);
+    showError('DEBUG: Calling ' + apiUrl.substring(0, 80) + '...');
+
     const response = await fetch(apiUrl);
+    showError('DEBUG: HTTP status = ' + response.status);
 
-    if (!response.ok) throw new Error('Server returned ' + response.status);
+    const rawText = await response.text();
+    showError('DEBUG: Response = ' + rawText.substring(0, 200));
 
-    const data = await response.json();
+    let data;
+    try { data = JSON.parse(rawText); } catch(pe) { throw new Error('Not valid JSON: ' + rawText.substring(0,100)); }
 
     if (data.status === 'error') throw new Error(data.message || 'AI error');
 
     const result = data.result;
-    if (!result) throw new Error('No result from AI — check Apps Script logs');
+    if (!result) throw new Error('No result in response: ' + JSON.stringify(data));
 
+    hideError(); // clear debug messages
     thinkingEl.classList.remove('active');
     populateResult(result, url);
 
   } catch (err) {
     thinkingEl.classList.remove('active');
     document.getElementById('analyseBtn').disabled = false;
-    showError('Error: ' + err.message + '. Make sure your Apps Script is deployed as a Web App with access set to Anyone.');
+    showError('❌ ' + err.message);
   }
 }
 

@@ -304,7 +304,7 @@ header { background: var(--navy); color: #fff; padding: 0 2rem; box-shadow: 0 2p
 // ═══════════════════════════════════════════════════════════════
 // CONFIGURATION — fill these in before using
 // ═══════════════════════════════════════════════════════════════
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 // Google Apps Script Web App URL — see setup instructions below
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxigE0VUyBr6xMOEt_hmJ72pYfQuXx2E1husqMVQCi-dh-7o2rOBe4SdsmrEQ8X3kSf/exec';
 // ═══════════════════════════════════════════════════════════════
@@ -468,7 +468,9 @@ async function analyse() {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || 'API error: ' + response.status);
+      // Show full error detail for debugging
+      const errDetail = JSON.stringify(data.error || data, null, 2);
+      throw new Error('API ' + response.status + ': ' + (data.error?.message || errDetail));
     }
 
     const text = (data.choices?.[0]?.message?.content || '').trim();

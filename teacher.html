@@ -4,150 +4,179 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS Staff — NLCS Jeju</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f9fc;color:#1a2a3a;min-height:100vh}
-:root{--blue:#3a75bf;--dark:#1a2a3a;--mid:#4a6080;--light:#8a9ab0;--rule:#d8e4f0;--bg:#f7f9fc;--surface:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f0f4f8;color:#1a2a3a;min-height:100vh}
+:root{
+  --primary:#1a2a3a;--blue:#3a75bf;--bg:#f0f4f8;--surface:#fff;
+  --border:#d8e4f0;--text:#1a2a3a;--muted:#6b7c93;--light:#8a9ab0;
+  --rule:#eaeef3;--radius:8px;
+  --shadow:0 1px 6px rgba(26,42,58,0.07);
+  --shadow-lg:0 4px 20px rgba(26,42,58,0.13);
+  --y5:#3b82f6;--y6:#8b5cf6;--y7:#10b981;--y8:#f59e0b;--y9:#ef4444;
+  --igcse:#0891b2;--ib:#7c3aed;
+}
 
-/* HEADER */
-header{background:var(--dark);position:sticky;top:0;z-index:200}
-.hd{max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;height:52px;gap:0}
-.hd-logo{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#fff}
-.hd-sep{width:1px;height:14px;background:rgba(255,255,255,0.2);margin:0 14px}
-.hd-dept{font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase}
-.hd-right{margin-left:auto;display:flex;align-items:center;gap:1.5rem}
-.hd-search input{font-size:10px;color:#fff;border:none;outline:none;background:none;
-  width:180px;font-family:inherit;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.2);
-  transition:border-color .2s;letter-spacing:0.3px}
-.hd-search input:focus{border-bottom-color:var(--blue)}
-.hd-search input::placeholder{color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;font-size:9px}
+/* ── HEADER ── */
+header{background:var(--primary);position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.hd{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;height:52px;gap:16px;flex-wrap:wrap;min-height:52px}
+.hd-brand{display:flex;flex-direction:column;gap:1px;flex-shrink:0}
+.hd-school{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#fff}
+.hd-dept{font-size:8px;color:rgba(255,255,255,0.4);letter-spacing:1.5px;text-transform:uppercase}
+.hd-div{width:1px;height:18px;background:rgba(255,255,255,0.15);flex-shrink:0}
+.year-tabs{display:flex;gap:2px;flex:1;flex-wrap:wrap;padding:4px 0}
+.year-tab{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  padding:5px 10px;color:rgba(255,255,255,0.4);background:none;border:none;
+  cursor:pointer;border-radius:5px;transition:all .15s;white-space:nowrap}
+.year-tab:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.08)}
+.year-tab.active{background:var(--blue);color:#fff}
+.hd-right{display:flex;align-items:center;gap:1rem;flex-shrink:0}
+.search-wrap{position:relative;display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  border-radius:8px;padding:5px 10px}
+.search-wrap i{font-size:13px;color:rgba(255,255,255,0.4)}
+.search-wrap input{background:none;border:none;outline:none;color:#fff;
+  font-size:10px;width:160px;font-family:inherit;letter-spacing:0.3px}
+.search-wrap input::placeholder{color:rgba(255,255,255,0.3);font-size:9px;letter-spacing:0.5px}
 .hd-link{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:rgba(255,255,255,0.5);cursor:pointer;text-decoration:none;transition:color .15s}
+  color:rgba(255,255,255,0.5);text-decoration:none;transition:color .15s;white-space:nowrap}
 .hd-link:hover{color:#fff}
 .staff-pill{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  color:var(--blue);background:rgba(58,117,191,0.2);padding:3px 9px}
+  color:var(--blue);background:rgba(58,117,191,0.2);padding:3px 9px;border-radius:4px;white-space:nowrap}
+.blue-bar{height:2px;background:var(--blue)}
 
-/* BLUE BAR */
-.blue-bar{height:3px;background:var(--blue)}
+/* ── MAIN ── */
+.main{max-width:1400px;margin:0 auto;padding:2rem 1.5rem}
+.year-section{display:none}.year-section.active{display:block}
 
-/* YEAR TABS */
-.tabs-bar{background:var(--dark);border-bottom:1px solid rgba(255,255,255,0.08);
-  position:sticky;top:52px;z-index:199}
-.tabs{max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:rgba(255,255,255,0.35);padding:11px 14px;border:none;background:none;cursor:pointer;
-  border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .15s}
-.tab:hover{color:rgba(255,255,255,0.65)}
-.tab.active{color:#fff;border-bottom-color:var(--blue)}
+/* ── YEAR HEADER ── */
+.year-header{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;
+  padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.year-sq{width:10px;height:10px;flex-shrink:0;border-radius:2px}
+.year-title{font-size:1.4rem;font-weight:600;color:var(--text)}
+.year-tag{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px}
+.stats{margin-left:auto;font-size:.72rem;color:var(--light);font-family:monospace}
 
-/* MAIN */
-.main{max-width:1280px;margin:0 auto;padding:2.5rem 2rem}
-.yr-section{display:none}.yr-section.active{display:block}
+/* ── TOPIC GRID ── */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1rem}
 
-/* SECTION HEAD */
-.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:2rem;
-  padding-bottom:1rem;border-bottom:1px solid var(--rule)}
-.sec-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--light)}
-.sec-stats{font-size:9px;color:var(--light);margin-left:auto}
-.sec-hidden{font-size:9px;color:#b84040;margin-left:6px}
+/* ── TOPIC CARD ── */
+.topic-card{background:var(--surface);border-radius:var(--radius);
+  box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;
+  transition:box-shadow .2s,transform .2s}
+.topic-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.topic-card-header{padding:.85rem 1rem;display:flex;align-items:center;gap:.6rem;
+  border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.topic-sq{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.topic-title{font-weight:600;font-size:.92rem;flex:1;color:var(--text)}
+.topic-count{font-size:.7rem;color:var(--light);font-family:monospace;white-space:nowrap}
+.chevron{width:15px;height:15px;stroke:var(--light);fill:none;stroke-width:2;
+  stroke-linecap:round;transition:transform .2s;flex-shrink:0}
+.topic-card.open .chevron{transform:rotate(180deg)}
+.topic-body{display:none}.topic-card.open .topic-body{display:block}
 
-/* TOPIC CARDS */
-.topic{background:var(--surface);border:1px solid var(--rule);margin-bottom:8px;
-  border-left:3px solid transparent;transition:border-left-color .2s}
-.topic.open{border-left-color:var(--blue)}
-.topic-hd{display:flex;align-items:center;padding:13px 16px;cursor:pointer;gap:12px}
-.topic-hd:hover .topic-name{color:var(--blue)}
-.topic-name{font-size:12px;font-weight:600;color:var(--dark);flex:1;transition:color .15s}
-.topic-count{font-size:9px;color:var(--light);letter-spacing:0.5px;text-transform:uppercase}
-.topic-arrow{font-size:11px;color:var(--light);transition:transform .2s}
-.topic.open .topic-arrow{transform:rotate(90deg)}
+/* ── LESSON GROUPS (Y5-9) ── */
+.lesson-group{border-bottom:1px solid var(--rule)}
+.lesson-group:last-child{border-bottom:none}
+.lesson-header{padding:.55rem 1rem;display:flex;align-items:center;gap:.5rem;
+  cursor:pointer;user-select:none;background:#fafbfd;transition:background .15s}
+.lesson-header:hover{background:#f0f4f8}
+.lesson-title{font-size:.8rem;font-weight:500;color:var(--text);flex:1}
+.lesson-chevron{width:13px;height:13px;stroke:var(--light);fill:none;stroke-width:2;
+  stroke-linecap:round;transition:transform .15s;flex-shrink:0}
+.lesson-group.open .lesson-chevron{transform:rotate(180deg)}
+.lesson-resources{display:none;padding:.5rem 1rem .6rem;flex-wrap:wrap;gap:.35rem}
+.lesson-group.open .lesson-resources{display:flex}
 
-/* LESSONS Y5-9 */
-.lessons{display:none;border-top:1px solid var(--rule);background:var(--bg)}
-.topic.open .lessons{display:block}
-.lesson{display:flex;align-items:center;padding:9px 16px 9px 28px;gap:12px;
-  border-bottom:1px solid var(--rule)}
-.lesson:last-child{border-bottom:none}
-.lesson-name{font-size:10px;color:var(--mid);flex:1}
-/* COLLAPSIBLE LESSONS */
-.lesson{flex-direction:column;align-items:stretch;cursor:pointer;padding:0 !important}
-.lesson-hd{display:flex;align-items:center;padding:9px 16px 9px 28px;gap:12px}
-.lesson-hd:hover .lesson-name{color:var(--blue)}
-.lesson-name{font-size:10px;color:var(--mid);flex:1;transition:color .15s}
-.lesson-arrow{font-size:9px;color:var(--light);transition:transform .15s}
-.lesson.open .lesson-arrow{transform:rotate(180deg)}
-.lesson-chips{display:none;padding:4px 16px 10px 28px;border-top:1px solid var(--rule)}
-.lesson.open .lesson-chips{display:flex;flex-wrap:wrap;gap:4px}
-.chips{display:flex;gap:4px;flex-wrap:wrap}
-.chip{font-size:8px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;
-  padding:2px 8px;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .15s}
-.chip:hover{opacity:.75}
-.chip-video    {color:#b84040;background:#fdf2f2}
-.chip-slides   {color:var(--blue);background:#ebf2fb}
-.chip-quiz     {color:#2d7a50;background:#edf7f2}
-.chip-worksheet{color:#7a5a20;background:#fdf7ee}
-.chip-doc      {color:var(--mid);background:var(--rule)}
-.chip-code     {color:#5a3a8a;background:#f3eefb}
-.chip-link     {color:var(--mid);background:var(--rule)}
-.chip-hidden   {opacity:.4;text-decoration:line-through}
+/* ── SUBTOPICS (iGCSE/IB) ── */
+.subtopic-section{border-bottom:1px solid var(--rule)}
+.subtopic-section:last-child{border-bottom:none}
+.subtopic-label{padding:.55rem 1rem;font-size:.78rem;font-weight:600;color:var(--text);
+  background:#fafbfd;border-bottom:1px solid var(--rule);display:flex;align-items:center;
+  gap:.5rem;cursor:pointer;user-select:none;transition:background .15s}
+.subtopic-label:hover{background:#f0f4f8}
+.sub-chevron{width:13px;height:13px;stroke:var(--light);fill:none;stroke-width:2;
+  stroke-linecap:round;transition:transform .15s;margin-left:auto;flex-shrink:0}
+.subtopic-section.open .sub-chevron{transform:rotate(180deg)}
+.subtopic-body{display:none;padding:.25rem 0}
+.subtopic-section.open .subtopic-body{display:block}
+.sub-lesson{padding:.35rem 1rem .35rem 1.5rem}
+.sub-lesson-label{font-size:.74rem;color:var(--text);font-weight:500;margin-bottom:.3rem}
+.sub-lesson-resources{display:flex;flex-wrap:wrap;gap:.3rem}
 
-/* SUBTOPICS iGCSE/IB */
-.subtopics{display:none;border-top:1px solid var(--rule);background:var(--bg)}
-.topic.open .subtopics{display:block}
-.subtopic{border-bottom:1px solid var(--rule)}
-.subtopic:last-child{border-bottom:none}
-.sub-hd{display:flex;align-items:center;padding:8px 16px 8px 28px;cursor:pointer;gap:8px}
-.sub-hd:hover .sub-name{color:var(--blue)}
-.sub-name{font-size:10px;font-weight:600;color:var(--mid);flex:1;transition:color .15s}
-.sub-arrow{font-size:9px;color:var(--light);transition:transform .15s}
-.subtopic.open .sub-arrow{transform:rotate(90deg)}
-.sub-lessons{display:none;background:#fff;border-top:1px solid var(--rule)}
-.subtopic.open .sub-lessons{display:block}
-.sub-lesson{display:flex;align-items:center;padding:7px 16px 7px 42px;gap:10px;
-  border-bottom:1px solid var(--rule)}
-.sub-lesson:last-child{border-bottom:none}
-.sub-lesson-name{font-size:10px;color:var(--mid);flex:1}
+/* ── CHIPS ── */
+.chip{display:inline-flex;align-items:center;gap:.3rem;padding:.28rem .65rem;
+  border-radius:5px;font-size:.72rem;font-weight:600;text-decoration:none;
+  border:0.5px solid;transition:opacity .15s,transform .15s;cursor:pointer;letter-spacing:.1px}
+.chip:hover{opacity:.8;transform:translateY(-1px)}
+.chip i{font-size:12px}
+.chip-video    {color:#b91c1c;background:#fef2f2;border-color:#fecaca}
+.chip-slides   {color:#c2410c;background:#fff7ed;border-color:#fed7aa}
+.chip-doc      {color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}
+.chip-quiz     {color:#15803d;background:#f0fdf4;border-color:#bbf7d0}
+.chip-worksheet{color:#b45309;background:#fffbeb;border-color:#fde68a}
+.chip-code     {color:#0369a1;background:#f0f9ff;border-color:#bae6fd}
+.chip-link     {color:#7e22ce;background:#faf5ff;border-color:#e9d5ff}
+.chip-folder   {color:#7e22ce;background:#faf5ff;border-color:#e9d5ff}
+.chip-pdf      {color:#b91c1c;background:#fef2f2;border-color:#fecaca}
+.chip-zip      {color:#4a6080;background:#f1f5f9;border-color:#cbd5e1}
+.chip-other    {color:#4a6080;background:#f1f5f9;border-color:#cbd5e1}
+.chip-hidden   {opacity:.4;border-style:dashed}
+.hidden-badge  {font-size:.63rem;background:#fef3c7;color:#92400e;padding:.1rem .35rem;
+  border-radius:4px;font-weight:600;border:1px solid #fde68a}
 
-/* HIDDEN BADGE */
-.hidden-badge{font-size:8px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;
-  color:#b84040;background:#fdf2f2;padding:2px 6px}
+/* ── TOOLTIP ── */
+.chip-wrap{position:relative;display:inline-flex;align-items:center}
+.chip-wrap .tooltip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;
+  transform:translateX(-50%);background:#1e293b;color:#f1f5f9;font-size:.72rem;
+  padding:.4rem .65rem;border-radius:6px;white-space:normal;max-width:220px;
+  line-height:1.4;z-index:999;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.chip-wrap .tooltip::after{content:'';position:absolute;top:100%;left:50%;
+  transform:translateX(-50%);border:5px solid transparent;border-top-color:#1e293b}
+.chip-wrap:hover .tooltip{display:block}
 
-/* SEARCH */
+/* ── SEARCH RESULTS ── */
 .search-results{display:none}.search-results.active{display:block}
-.sr-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule);gap:12px;flex-wrap:wrap}
-.sr-meta{font-size:9px;color:var(--light);letter-spacing:0.5px;text-transform:uppercase}
+.sr-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:.7rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.sr-meta{font-size:.72rem;color:var(--light);font-family:monospace}
 
-/* LOADING */
-.loading{display:flex;align-items:center;justify-content:center;min-height:50vh;
-  font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--light)}
+/* ── LOADING ── */
+.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:60vh;gap:1rem;color:var(--light)}
+.spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--blue);
+  border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* PASSWORD GATE */
-#gate{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:9999}
-.gate-box{background:#fff;width:380px;max-width:90vw;padding:2.5rem}
-.gate-stripe{height:3px;background:var(--blue);margin-bottom:2rem}
-.gate-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dark);margin-bottom:.3rem}
+/* ── PASSWORD GATE ── */
+#gate{position:fixed;inset:0;background:var(--primary);display:flex;
+  align-items:center;justify-content:center;z-index:9999}
+.gate-box{background:#fff;border-radius:var(--radius);padding:2.5rem;width:380px;max-width:90vw}
+.gate-stripe{height:2px;background:var(--blue);margin-bottom:2rem}
+.gate-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text);margin-bottom:.25rem}
 .gate-sub{font-size:11px;color:var(--light);margin-bottom:2rem}
-.gate-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-bottom:.5rem}
-.gate-input{width:100%;border:none;border-bottom:1px solid var(--rule);padding:.6rem 0;
-  font-size:12px;font-family:inherit;outline:none;color:var(--dark);transition:border-color .2s}
+.gate-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--light);margin-bottom:.5rem}
+.gate-input{width:100%;border:none;border-bottom:1px solid var(--border);padding:.6rem 0;
+  font-size:12px;font-family:inherit;outline:none;color:var(--text);transition:border-color .2s}
 .gate-input:focus{border-bottom-color:var(--blue)}
 .gate-btn{margin-top:1.5rem;font-size:9px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;background:var(--dark);color:#fff;border:none;
-  padding:.7rem 1.75rem;cursor:pointer;transition:background .2s}
+  text-transform:uppercase;background:var(--primary);color:#fff;border:none;
+  padding:.7rem 1.75rem;border-radius:5px;cursor:pointer;transition:background .2s}
 .gate-btn:hover{background:var(--blue)}
 .gate-err{font-size:10px;color:#b84040;margin-top:.6rem;display:none}
 
-/* FOOTER */
-footer{border-top:1px solid var(--rule);padding:1.25rem 2rem;display:flex;
-  align-items:center;justify-content:space-between;background:var(--surface);margin-top:3rem}
-.ft-l{font-size:9px;color:var(--light);letter-spacing:1.5px;text-transform:uppercase}
-.ft-r{font-size:9px;color:var(--light)}
+/* ── FOOTER ── */
+footer{text-align:center;padding:1.5rem;color:var(--light);font-size:.75rem;
+  border-top:1px solid var(--border);margin-top:2.5rem}
 
-@media(max-width:640px){
-  .hd,.main,footer{padding-left:1rem;padding-right:1rem}
-  .tabs{padding:0 1rem}
-  .hd-search{display:none}
+@media(max-width:680px){
+  .hd{padding:0 1rem;gap:8px}
+  .main{padding:1rem}
+  .topic-grid{grid-template-columns:1fr}
+  .search-wrap input{width:120px}
 }
 </style>
 </head>
@@ -168,39 +197,43 @@ footer{border-top:1px solid var(--rule);padding:1.25rem 2rem;display:flex;
 
 <header style="display:none" id="siteHeader">
   <div class="hd">
-    <div class="hd-logo">NLCS Jeju</div>
-    <div class="hd-sep"></div>
-    <div class="hd-dept">Computer Science</div>
+    <div class="hd-brand">
+      <div class="hd-school">NLCS Jeju</div>
+      <div class="hd-dept">Computer Science</div>
+    </div>
+    <div class="hd-div"></div>
+    <nav class="year-tabs" id="yearTabs"></nav>
     <div class="hd-right">
-      <div class="hd-search"><input type="text" id="searchInput" placeholder="Search resources"></div>
+      <div class="search-wrap">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" id="searchInput" placeholder="Search resources">
+      </div>
       <span class="staff-pill">Staff View</span>
       <a href="index.html" class="hd-link">Student site &#8599;</a>
     </div>
   </div>
   <div class="blue-bar"></div>
 </header>
-<div class="tabs-bar" style="display:none" id="tabsBar">
-  <div class="tabs" id="yearTabs"></div>
-</div>
 <div class="main" id="mainContent" style="display:none">
-  <div class="loading" id="loadingEl">Loading &#8212;</div>
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <div>Loading resources&hellip;</div>
+  </div>
 </div>
 <footer style="display:none" id="siteFooter">
-  <div class="ft-l">CS Department &mdash; NLCS Jeju &mdash; Staff View</div>
-  <div class="ft-r" id="lastUpdated"></div>
+  NLCS Jeju &mdash; Computer Science &mdash; Staff View &nbsp;&middot;&nbsp; <span id="lastUpdated"></span>
 </footer>
 
 <script>
-const SHEET_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQVhR-gF88rl6ypPYwGkAlbK_jau3Qi9cnBHXd8eSMrMPbkxaThDD95jrBuj-wDoHRy4pQ9yrE5bP92/pub?gid=1154145124&single=true&output=csv';
+const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQVhR-gF88rl6ypPYwGkAlbK_jau3Qi9cnBHXd8eSMrMPbkxaThDD95jrBuj-wDoHRy4pQ9yrE5bP92/pub?gid=1154145124&single=true&output=csv';
 const STAFF_PASSWORD='cs-staff-2025';
 function checkPw(){
   if(document.getElementById('pwInput').value===STAFF_PASSWORD){
     document.getElementById('gate').style.display='none';
     document.getElementById('siteHeader').style.display='';
-    document.getElementById('tabsBar').style.display='';
     document.getElementById('mainContent').style.display='';
     document.getElementById('siteFooter').style.display='';
-    loadSheet(SHEET_URL,true);
+    loadSheet(SHEET_CSV_URL,true);
   }else{
     document.getElementById('pwErr').style.display='block';
     document.getElementById('pwInput').value='';
@@ -209,7 +242,16 @@ function checkPw(){
 }
 
 const YEAR_ORDER=['Year 5','Year 6','Year 7','Year 8','Year 9','iGCSE','IB'];
-const KS=new Set(['Year 5','Year 6','Year 7','Year 8','Year 9']);
+const KS_YEARS=new Set(['Year 5','Year 6','Year 7','Year 8','Year 9']);
+const YEAR_CONFIG={
+  'Year 5':{color:'#3b82f6',tag:'KS2',tagBg:'#dbeafe',tagCol:'#1d4ed8'},
+  'Year 6':{color:'#8b5cf6',tag:'KS2',tagBg:'#ede9fe',tagCol:'#6d28d9'},
+  'Year 7':{color:'#10b981',tag:'KS3',tagBg:'#d1fae5',tagCol:'#065f46'},
+  'Year 8':{color:'#f59e0b',tag:'KS3',tagBg:'#fef3c7',tagCol:'#92400e'},
+  'Year 9':{color:'#ef4444',tag:'KS3',tagBg:'#fee2e2',tagCol:'#991b1b'},
+  'iGCSE': {color:'#0891b2',tag:'iGCSE',tagBg:'#cffafe',tagCol:'#155e75'},
+  'IB':    {color:'#7c3aed',tag:'IB DP',tagBg:'#ede9fe',tagCol:'#5b21b6'},
+};
 
 function normaliseHeader(h){
   h=h.replace(/\n/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
@@ -226,7 +268,7 @@ function normaliseHeader(h){
 }
 
 function parseCSV(text){
-  function full(txt){
+  function fullParse(txt){
     const rows=[];let row=[],cur='',inQ=false;
     for(let i=0;i<txt.length;i++){
       const ch=txt[i];
@@ -240,7 +282,7 @@ function parseCSV(text){
     if(cur||row.length)rows.push([...row,cur.trim()]);
     return rows;
   }
-  const all=full(text);
+  const all=fullParse(text);
   let hi=0;
   for(let i=0;i<Math.min(all.length,10);i++){
     if(all[i].some(c=>c.toLowerCase().includes('year group'))){hi=i;break;}
@@ -258,13 +300,13 @@ function buildTree(rows,tv){
       lesson=r['Lesson']||'',title=r['Resource Title'],link=r['Link'],
       type=r['Type']||'Link',
       show=/^(true|yes|1)$/i.test((r['Show to Students']||'').trim()),
-      notes=r['Notes']||'';
+      notes=(r['Notes']||'').trim();
     if(!title||!link||link==='#') return;
     if(!tv&&!show) return;
     if(!tree[yg])tree[yg]={};
     if(!tree[yg][topic])tree[yg][topic]={};
     const res={title,link,type,show,notes};
-    if(KS.has(yg)){
+    if(KS_YEARS.has(yg)){
       const les=lesson||'Resources';
       if(!tree[yg][topic][les])tree[yg][topic][les]=[];
       tree[yg][topic][les].push(res);
@@ -279,44 +321,113 @@ function buildTree(rows,tv){
   return tree;
 }
 
-function cc(t){
+function chipClass(t){
   const m={video:'chip-video',slides:'chip-slides',ppt:'chip-slides',
-    doc:'chip-doc',document:'chip-doc',quiz:'chip-quiz',
-    worksheet:'chip-worksheet',code:'chip-code',link:'chip-link'};
-  return m[(t||'').toLowerCase()]||'chip-link';
+    doc:'chip-doc',document:'chip-doc',quiz:'chip-quiz',worksheet:'chip-worksheet',
+    code:'chip-code',link:'chip-link',folder:'chip-folder',pdf:'chip-pdf',zip:'chip-zip'};
+  return m[(t||'').toLowerCase()]||'chip-other';
 }
 
-function chip(r,tv){
+function chipIcon(t){
+  const k=(t||'').toLowerCase();
+  if(k==='video')     return '<i class="ti ti-player-play" aria-hidden="true"></i>';
+  if(k==='slides'||k==='ppt') return '<i class="ti ti-presentation" aria-hidden="true"></i>';
+  if(k==='doc'||k==='document') return '<i class="ti ti-file-text" aria-hidden="true"></i>';
+  if(k==='quiz')      return '<i class="ti ti-help-circle" aria-hidden="true"></i>';
+  if(k==='worksheet') return '<i class="ti ti-clipboard-list" aria-hidden="true"></i>';
+  if(k==='code')      return '<i class="ti ti-code" aria-hidden="true"></i>';
+  if(k==='folder')    return '<i class="ti ti-folder" aria-hidden="true"></i>';
+  if(k==='pdf')       return '<i class="ti ti-file-type-pdf" aria-hidden="true"></i>';
+  if(k==='zip')       return '<i class="ti ti-file-zip" aria-hidden="true"></i>';
+  return '<i class="ti ti-link" aria-hidden="true"></i>';
+}
+
+function slug(s){return(s||'').replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,60);}
+
+function chipHTML(r,tv){
   const hidden=!r.show;
-  const cls='chip '+cc(r.type)+(hidden&&tv?' chip-hidden':'');
+  const cls='chip '+chipClass(r.type)+(hidden&&tv?' chip-hidden':'');
   const badge=hidden&&tv?' <span class="hidden-badge">Hidden</span>':'';
-  const tip=r.notes?` title="${r.notes}"`:'';
-  if(!r.link||r.link==='#') return `<span class="${cls}">${r.title}</span>${badge}`;
-  return `<a href="${r.link}" target="_blank" rel="noopener" class="${cls}"${tip}>${r.title}</a>${badge}`;
+  const icon=chipIcon(r.type);
+  const inner=`<a href="${r.link}" target="_blank" rel="noopener" class="${cls}">${icon} ${r.title}</a>`;
+  if(r.notes){
+    return `<span class="chip-wrap">${inner}<span class="tooltip">${r.notes}</span></span>${badge}`;
+  }
+  return inner+badge;
 }
 
-function slug(s){return(s||'').replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,50);}
+function renderTopic(yg,topic,data,cfg,tv){
+  const ks=KS_YEARS.has(yg);
+  const card=document.createElement('div');
+  card.className='topic-card';
+  let rc=0,body='';
 
-function renderSite(rows,tv){
-  const main=document.getElementById('mainContent');
-  const tabsEl=document.getElementById('yearTabs');
-  main.innerHTML='';tabsEl.innerHTML='';
+  if(ks){
+    Object.entries(data).forEach(([lesson,resources])=>{
+      rc+=resources.length;
+      const id='lg_'+slug(yg+topic+lesson);
+      body+=`<div class="lesson-group" id="${id}">
+        <div class="lesson-header" onclick="toggleLesson('${id}')">
+          <span class="lesson-title">${lesson}</span>
+          ${tv?`<span style="font-size:.63rem;color:var(--light)">${resources.filter(r=>!r.show).length||''}</span>`:''}
+          <svg class="lesson-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="lesson-resources">
+          ${resources.map(r=>chipHTML(r,tv)).join(' ')||'<span style="font-size:.75rem;color:var(--light)">No resources yet</span>'}
+        </div>
+      </div>`;
+    });
+  } else {
+    Object.entries(data).forEach(([sub,lessons])=>{
+      rc+=Object.values(lessons).flat().length;
+      const sid='sub_'+slug(yg+topic+sub);
+      body+=`<div class="subtopic-section" id="${sid}">
+        <div class="subtopic-label" onclick="toggleSub('${sid}')">
+          ${sub}
+          <svg class="sub-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="subtopic-body">`;
+      Object.entries(lessons).forEach(([lesson,resources])=>{
+        body+=`<div class="sub-lesson">
+          <div class="sub-lesson-label">${lesson}</div>
+          <div class="sub-lesson-resources">${resources.map(r=>chipHTML(r,tv)).join(' ')||'<span style="font-size:.72rem;color:var(--light)">No resources yet</span>'}</div>
+        </div>`;
+      });
+      body+=`</div></div>`;
+    });
+  }
+
+  card.innerHTML=`<div class="topic-card-header">
+    <div class="topic-sq" style="background:${cfg.color}"></div>
+    <div class="topic-title">${topic}</div>
+    <div class="topic-count">${rc} resources</div>
+    <svg class="chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div><div class="topic-body">${body||'<div style="padding:.75rem 1rem;font-size:.8rem;color:var(--light)">No resources yet</div>'}</div>`;
+  card.querySelector('.topic-card-header').addEventListener('click',()=>card.classList.toggle('open'));
+  return card;
+}
+
+function renderSite(rows,tv,containerId,tabsId){
+  const main=document.getElementById(containerId);
+  const tabsEl=document.getElementById(tabsId);
+  if(!main||!tabsEl) return;
   const srDiv=document.createElement('div');
   srDiv.className='search-results';srDiv.id='searchResults';
   main.appendChild(srDiv);
   const tree=buildTree(rows,tv);
   const years=YEAR_ORDER.filter(y=>tree[y]);
-  if(!years.length){main.innerHTML+='<div class="loading">No resources found</div>';return;}
+  if(!years.length){main.innerHTML+='<div style="padding:3rem;text-align:center;color:var(--light)">No resources found. Check your Google Sheet URL.</div>';return;}
 
   years.forEach((yg,i)=>{
     const btn=document.createElement('button');
-    btn.className='tab'+(i===0?' active':'');
+    btn.className='year-tab'+(i===0?' active':'');
     btn.textContent=yg;btn.dataset.year=yg;
     btn.addEventListener('click',()=>switchYear(yg));
     tabsEl.appendChild(btn);
   });
 
   years.forEach((yg,i)=>{
+    const cfg=YEAR_CONFIG[yg]||{color:'#64748b',tag:'',tagBg:'#f1f5f9',tagCol:'#475569'};
     const topics=tree[yg];
     const rc=rows.filter(r=>r['Year Group']===yg&&r['Link']&&r['Link']!=='#'
       &&(tv||/^(true|yes|1)$/i.test((r['Show to Students']||'').trim()))).length;
@@ -324,74 +435,39 @@ function renderSite(rows,tv){
       &&!/^(true|yes|1)$/i.test((r['Show to Students']||'').trim())
       &&r['Link']&&r['Link']!=='#').length:0;
     const sec=document.createElement('div');
-    sec.className='yr-section'+(i===0?' active':'');
+    sec.className='year-section'+(i===0?' active':'');
     sec.id='sec_'+slug(yg);
-    sec.innerHTML=`<div class="sec-head">
-      <div class="sec-title">${yg}</div>
-      <div class="sec-stats">${Object.keys(topics).length} topics &middot; ${rc} resources${tv&&hc?`<span class="sec-hidden">&middot; ${hc} hidden</span>`:''}</div>
-    </div><div class="topics-list" id="tl_${slug(yg)}"></div>`;
+    sec.innerHTML=`<div class="year-header">
+      <div class="year-sq" style="background:${cfg.color}"></div>
+      <div class="year-title">${yg}</div>
+      ${cfg.tag?`<span class="year-tag" style="background:${cfg.tagBg};color:${cfg.tagCol}">${cfg.tag}</span>`:''}
+      ${tv?`<span style="font-size:.72rem;background:#dcfce7;color:#15803d;padding:.2rem .6rem;border-radius:4px;font-weight:600">Staff View</span>`:''}
+      <div class="stats">${Object.keys(topics).length} topics · ${rc} resources${tv&&hc?` · <span style="color:#b45309">${hc} hidden</span>`:''}</div>
+    </div>
+    <div class="topic-grid" id="grid_${slug(yg)}"></div>`;
     main.appendChild(sec);
-    const tl=sec.querySelector('.topics-list');
-    const isKS=KS.has(yg);
-
-    Object.entries(topics).forEach(([topic,data],ti)=>{
-      const el=document.createElement('div');
-      el.className='topic'+(ti===0?' open':'');
-      const tid='t_'+slug(yg+topic);
-      let rc2=0,body='';
-      if(isKS){
-        body='<div class="lessons">';
-        Object.entries(data).forEach(([les,res])=>{
-          rc2+=res.length;
-          const lid='l_'+slug(yg+topic+les);
-          body+=`<div class="lesson" id="${lid}">
-            <div class="lesson-hd" onclick="toggleLesson('${lid}')">
-              <div class="lesson-name">${les}</div>
-              <div class="lesson-arrow">&#8964;</div>
-            </div>
-            <div class="lesson-chips">${res.map(r=>chip(r,tv)).join('')}</div>
-          </div>`;
-        });
-        body+='</div>';
-      } else {
-        body='<div class="subtopics">';
-        Object.entries(data).forEach(([sub,lessons],si)=>{
-          const sid='s_'+slug(yg+topic+sub);
-          Object.values(lessons).forEach(a=>rc2+=a.length);
-          body+=`<div class="subtopic${si===0?' open':''}" id="${sid}">
-            <div class="sub-hd" onclick="toggleSub('${sid}')">
-              <div class="sub-name">${sub}</div><div class="sub-arrow">▸</div>
-            </div><div class="sub-lessons">`;
-          Object.entries(lessons).forEach(([les,res])=>{
-            body+=`<div class="sub-lesson"><div class="sub-lesson-name">${les}</div>
-              <div class="chips">${res.map(r=>chip(r,tv)).join('')}</div></div>`;
-          });
-          body+='</div></div>';
-        });
-        body+='</div>';
-      }
-      el.innerHTML=`<div class="topic-hd" onclick="toggleTopic('${tid}')">
-        <div class="topic-name">${topic}</div>
-        <div class="topic-count">${rc2} resources</div>
-        <div class="topic-arrow">&#9658;</div>
-      </div>${body}`;
-      el.id=tid;tl.appendChild(el);
+    const grid=sec.querySelector('.topic-grid');
+    Object.entries(topics).forEach(([topic,data])=>{
+      grid.appendChild(renderTopic(yg,topic,data,cfg,tv));
     });
   });
-  document.getElementById('lastUpdated').textContent=
-    new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  document.querySelectorAll('.topic-card:first-child').forEach(c=>{
+    c.classList.add('open');
+    c.querySelectorAll('.lesson-group:first-child').forEach(l=>l.classList.add('open'));
+    c.querySelectorAll('.subtopic-section:first-child').forEach(s=>s.classList.add('open'));
+  });
+  document.getElementById('lastUpdated').textContent='Loaded: '+new Date().toLocaleString();
 }
 
-function toggleTopic(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
 function toggleLesson(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
 function toggleSub(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
 function switchYear(yg){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.year===yg));
-  document.querySelectorAll('.yr-section').forEach(s=>s.classList.toggle('active',s.id==='sec_'+slug(yg)));
+  document.querySelectorAll('.year-tab').forEach(t=>t.classList.toggle('active',t.dataset.year===yg));
+  document.querySelectorAll('.year-section').forEach(s=>s.classList.toggle('active',s.id==='sec_'+slug(yg)));
   document.getElementById('searchResults').classList.remove('active');
   document.getElementById('searchInput').value='';
 }
-
 function initSearch(rows,tv){
   document.getElementById('searchInput').addEventListener('input',function(){
     const q=this.value.trim().toLowerCase();
@@ -403,28 +479,27 @@ function initSearch(rows,tv){
       if(!r['Link']||r['Link']==='#')return false;
       return['Resource Title','Topic','Subtopic','Lesson','Year Group'].some(k=>(r[k]||'').toLowerCase().includes(q));
     });
-    if(!hits.length){sr.innerHTML='<div style="padding:2rem 0;font-size:9px;color:var(--light);letter-spacing:1.5px;text-transform:uppercase">No results</div>';return;}
-    sr.innerHTML=`<div style="font-size:9px;color:var(--light);letter-spacing:1px;text-transform:uppercase;padding:.75rem 0 1rem">${hits.length} result${hits.length!==1?'s':''}</div>`+
+    if(!hits.length){sr.innerHTML='<div style="padding:2rem;text-align:center;color:var(--light)">No results</div>';return;}
+    sr.innerHTML=`<div style="margin-bottom:1rem;font-size:.82rem;color:var(--light)">${hits.length} result${hits.length!==1?'s':''} for "<strong>${q}</strong>"</div>`+
       hits.map(r=>{
         const hidden=tv&&!/^(true|yes|1)$/i.test((r['Show to Students']||'').trim());
         return`<div class="sr-item">
-          <a href="${r['Link']}" target="_blank" rel="noopener" class="chip ${cc(r['Type']||'link')}">${r['Resource Title']}</a>
+          <a href="${r['Link']}" target="_blank" rel="noopener" class="chip ${chipClass(r['Type'])}${hidden?' chip-hidden':''}">${chipIcon(r['Type'])} ${r['Resource Title']}</a>
           ${hidden?'<span class="hidden-badge">Hidden</span>':''}
-          <div class="sr-meta">${r['Year Group']}${r['Topic']?' &middot; '+r['Topic']:''}${r['Lesson']?' &middot; '+r['Lesson']:''}</div>
+          <div class="sr-meta">${r['Year Group']}${r['Topic']?' · '+r['Topic']:''}${r['Lesson']?' · '+r['Lesson']:''}</div>
         </div>`;
       }).join('');
   });
 }
-
 async function loadSheet(url,tv){
   try{
     const resp=await fetch(url+'&t='+Date.now());
     const rows=parseCSV(await resp.text());
-    document.getElementById('loadingEl').style.display='none';
-    renderSite(rows,tv);
+    document.getElementById('loadingScreen').style.display='none';
+    renderSite(rows,tv,'mainContent','yearTabs');
     initSearch(rows,tv);
   }catch(e){
-    document.getElementById('loadingEl').textContent='Could not load resources. '+e.message;
+    document.getElementById('loadingScreen').innerHTML=`<div style="color:var(--light)">Could not load resources.<br><small>${e.message}</small></div>`;
   }
 }
 

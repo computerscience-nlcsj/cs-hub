@@ -4,191 +4,156 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS Staff — NLCS Jeju</title>
-
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:#1a2a3a;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f9fc;color:#1a2a3a;min-height:100vh}
+:root{--blue:#3a75bf;--dark:#1a2a3a;--mid:#4a6080;--light:#8a9ab0;--rule:#d8e4f0;--bg:#f7f9fc;--surface:#fff}
 
-/* ── VARIABLES ── */
-:root{
-  --blue:#3a75bf;
-  --dark:#1a2a3a;
-  --mid:#6b7c93;
-  --light:#bbc5d0;
-  --rule:#eaeef3;
-  --bg:#f7f9fc;
-}
-
-/* ── HEADER ── */
-header{border-bottom:0.5px solid var(--rule);position:sticky;top:0;background:#fff;z-index:100}
-.hd{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;height:52px;gap:0}
-.hd-logo{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dark)}
-.hd-sep{width:1px;height:12px;background:var(--rule);margin:0 14px}
-.hd-dept{font-size:10px;color:var(--mid);letter-spacing:2px;text-transform:uppercase}
+/* HEADER */
+header{background:var(--dark);position:sticky;top:0;z-index:200}
+.hd{max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;height:52px;gap:0}
+.hd-logo{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#fff}
+.hd-sep{width:1px;height:14px;background:rgba(255,255,255,0.2);margin:0 14px}
+.hd-dept{font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase}
 .hd-right{margin-left:auto;display:flex;align-items:center;gap:1.5rem}
-.hd-search{position:relative}
-.hd-search input{font-size:10px;letter-spacing:0.5px;color:var(--dark);border:none;outline:none;
-  background:none;width:180px;font-family:inherit;padding:4px 0;
-  border-bottom:0.5px solid var(--rule);transition:border-color .2s}
+.hd-search input{font-size:10px;color:#fff;border:none;outline:none;background:none;
+  width:180px;font-family:inherit;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.2);
+  transition:border-color .2s;letter-spacing:0.3px}
 .hd-search input:focus{border-bottom-color:var(--blue)}
-.hd-search input::placeholder{color:var(--light);text-transform:uppercase;letter-spacing:1px;font-size:9px}
-.hd-action{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--blue);cursor:pointer;text-decoration:none}
+.hd-search input::placeholder{color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;font-size:9px}
+.hd-link{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);cursor:pointer;text-decoration:none;transition:color .15s}
+.hd-link:hover{color:#fff}
+.staff-pill{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--blue);background:rgba(58,117,191,0.2);padding:3px 9px}
 
-/* ── BLUE RULE ── */
-.blue-rule{height:2px;background:var(--blue)}
+/* BLUE BAR */
+.blue-bar{height:3px;background:var(--blue)}
 
-/* ── YEAR TABS ── */
-.tabs-wrap{border-bottom:0.5px solid var(--rule);background:#fff;position:sticky;top:52px;z-index:99}
-.tabs{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;overflow-x:auto;scrollbar-width:none}
+/* YEAR TABS */
+.tabs-bar{background:var(--dark);border-bottom:1px solid rgba(255,255,255,0.08);
+  position:sticky;top:52px;z-index:199}
+.tabs{max-width:1280px;margin:0 auto;padding:0 2rem;display:flex;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--light);padding:11px 14px;border:none;background:none;cursor:pointer;
-  border-bottom:1.5px solid transparent;margin-bottom:-0.5px;white-space:nowrap;
-  transition:color .15s}
-.tab:hover{color:var(--mid)}
-.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+  color:rgba(255,255,255,0.35);padding:11px 14px;border:none;background:none;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .15s}
+.tab:hover{color:rgba(255,255,255,0.65)}
+.tab.active{color:#fff;border-bottom-color:var(--blue)}
 
-/* ── MAIN ── */
-.main{max-width:1200px;margin:0 auto;padding:2rem}
-
-/* ── YEAR SECTION ── */
+/* MAIN */
+.main{max-width:1280px;margin:0 auto;padding:2.5rem 2rem}
 .yr-section{display:none}.yr-section.active{display:block}
 
-/* ── SECTION HEADER ── */
-.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:1.75rem;padding-bottom:1rem;
-  border-bottom:0.5px solid var(--rule)}
+/* SECTION HEAD */
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:2rem;
+  padding-bottom:1rem;border-bottom:1px solid var(--rule)}
 .sec-title{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--light)}
-.sec-stats{font-size:9px;color:var(--light);letter-spacing:0.5px}
+.sec-stats{font-size:9px;color:var(--light);margin-left:auto}
+.sec-hidden{font-size:9px;color:#b84040;margin-left:6px}
 
-/* ── TOPIC LIST ── */
-.topics{}
-.topic{border-bottom:0.5px solid var(--rule)}
-.topic:last-child{border-bottom:none}
-
-.topic-hd{display:flex;align-items:center;padding:14px 0;cursor:pointer;gap:12px;
-  transition:opacity .15s}
+/* TOPIC CARDS */
+.topic{background:var(--surface);border:1px solid var(--rule);margin-bottom:8px;
+  border-left:3px solid transparent;transition:border-left-color .2s}
+.topic.open{border-left-color:var(--blue)}
+.topic-hd{display:flex;align-items:center;padding:13px 16px;cursor:pointer;gap:12px}
 .topic-hd:hover .topic-name{color:var(--blue)}
-.topic-name{font-size:12px;font-weight:600;color:var(--dark);flex:1;letter-spacing:0.1px;
-  transition:color .15s}
-.topic-meta{font-size:9px;color:var(--light);letter-spacing:0.5px;text-transform:uppercase}
-.topic-chevron{font-size:10px;color:var(--light);transition:transform .2s;line-height:1}
-.topic.open .topic-chevron{transform:rotate(90deg)}
+.topic-name{font-size:12px;font-weight:600;color:var(--dark);flex:1;transition:color .15s}
+.topic-count{font-size:9px;color:var(--light);letter-spacing:0.5px;text-transform:uppercase}
+.topic-arrow{font-size:11px;color:var(--light);transition:transform .2s}
+.topic.open .topic-arrow{transform:rotate(90deg)}
 
-/* ── LESSONS (Y5-9) ── */
-.lessons{display:none;padding-bottom:12px}
+/* LESSONS Y5-9 */
+.lessons{display:none;border-top:1px solid var(--rule);background:var(--bg)}
 .topic.open .lessons{display:block}
-.lesson{display:flex;align-items:center;padding:8px 0 8px 16px;gap:12px;
-  border-left:1px solid var(--rule)}
-.lesson-name{font-size:10px;color:var(--mid);flex:1;letter-spacing:0.1px}
+.lesson{display:flex;align-items:center;padding:9px 16px 9px 28px;gap:12px;
+  border-bottom:1px solid var(--rule)}
+.lesson:last-child{border-bottom:none}
+.lesson-name{font-size:10px;color:var(--mid);flex:1}
 .chips{display:flex;gap:4px;flex-wrap:wrap}
 .chip{font-size:8px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;
-  padding:2px 7px;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .15s}
-.chip:hover{opacity:.7}
-.chip-video  {color:#b84040;background:#fdf2f2}
-.chip-slides {color:var(--blue);background:#f0f5fc}
-.chip-quiz   {color:#2d7a50;background:#f0faf4}
-.chip-worksheet{color:#7a5a20;background:#fdf8f0}
-.chip-doc    {color:var(--mid);background:var(--rule)}
-.chip-code   {color:#5a3a8a;background:#f5f0fc}
-.chip-link   {color:var(--mid);background:var(--rule)}
+  padding:2px 8px;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .15s}
+.chip:hover{opacity:.75}
+.chip-video    {color:#b84040;background:#fdf2f2}
+.chip-slides   {color:var(--blue);background:#ebf2fb}
+.chip-quiz     {color:#2d7a50;background:#edf7f2}
+.chip-worksheet{color:#7a5a20;background:#fdf7ee}
+.chip-doc      {color:var(--mid);background:var(--rule)}
+.chip-code     {color:#5a3a8a;background:#f3eefb}
+.chip-link     {color:var(--mid);background:var(--rule)}
+.chip-hidden   {opacity:.4;text-decoration:line-through}
 
-/* ── SUBTOPICS (iGCSE/IB) ── */
-.subtopics{display:none;padding-bottom:12px}
+/* SUBTOPICS iGCSE/IB */
+.subtopics{display:none;border-top:1px solid var(--rule);background:var(--bg)}
 .topic.open .subtopics{display:block}
-.subtopic{margin-bottom:6px;padding-left:16px;border-left:1px solid var(--rule)}
-.sub-hd{display:flex;align-items:center;padding:6px 0;cursor:pointer;gap:8px}
+.subtopic{border-bottom:1px solid var(--rule)}
+.subtopic:last-child{border-bottom:none}
+.sub-hd{display:flex;align-items:center;padding:8px 16px 8px 28px;cursor:pointer;gap:8px}
 .sub-hd:hover .sub-name{color:var(--blue)}
-.sub-name{font-size:10px;font-weight:600;color:var(--mid);flex:1;letter-spacing:0.1px;
-  transition:color .15s}
+.sub-name{font-size:10px;font-weight:600;color:var(--mid);flex:1;transition:color .15s}
 .sub-arrow{font-size:9px;color:var(--light);transition:transform .15s}
 .subtopic.open .sub-arrow{transform:rotate(90deg)}
-.sub-lessons{display:none;padding-left:14px;border-left:1px solid var(--rule)}
+.sub-lessons{display:none;background:#fff;border-top:1px solid var(--rule)}
 .subtopic.open .sub-lessons{display:block}
-.sub-lesson{display:flex;align-items:center;padding:6px 0;gap:10px}
+.sub-lesson{display:flex;align-items:center;padding:7px 16px 7px 42px;gap:10px;
+  border-bottom:1px solid var(--rule)}
+.sub-lesson:last-child{border-bottom:none}
 .sub-lesson-name{font-size:10px;color:var(--mid);flex:1}
 
-/* ── HIDDEN BADGE ── */
+/* HIDDEN BADGE */
 .hidden-badge{font-size:8px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;
-  color:#b84040;background:#fdf2f2;padding:1px 5px}
+  color:#b84040;background:#fdf2f2;padding:2px 6px}
 
-/* ── STAFF BADGE ── */
-.staff-badge{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  color:var(--blue);background:#f0f5fc;padding:2px 8px}
-
-/* ── SEARCH RESULTS ── */
+/* SEARCH */
 .search-results{display:none}.search-results.active{display:block}
-.sr-item{display:flex;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--rule);gap:12px}
+.sr-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule);gap:12px;flex-wrap:wrap}
 .sr-meta{font-size:9px;color:var(--light);letter-spacing:0.5px;text-transform:uppercase}
 
-/* ── LOADING ── */
+/* LOADING */
 .loading{display:flex;align-items:center;justify-content:center;min-height:50vh;
   font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--light)}
 
-/* ── FOOTER ── */
-footer{border-top:0.5px solid var(--rule);padding:1rem 2rem;
-  display:flex;align-items:center;justify-content:space-between;margin-top:3rem}
-.ft-left{font-size:9px;color:var(--light);letter-spacing:1.5px;text-transform:uppercase}
-.ft-right{font-size:9px;color:var(--light)}
-
-/* ── SETUP BANNER ── */
-.setup-banner{border:0.5px solid var(--rule);padding:1.25rem 1.5rem;margin-bottom:2rem;
-  border-left:2px solid var(--blue)}
-.setup-banner h3{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--dark);margin-bottom:.5rem}
-.setup-banner p{font-size:11px;color:var(--mid);line-height:1.7}
-.setup-banner code{font-family:monospace;font-size:10px;background:var(--bg);
-  padding:.1rem .4rem;color:var(--blue)}
-
-/* ── PASSWORD GATE ── */
-#gate{position:fixed;inset:0;background:#fff;display:flex;align-items:center;
-  justify-content:center;z-index:9999}
-.gate-inner{width:360px;max-width:90vw;text-align:left}
-.gate-rule{height:2px;background:var(--blue);width:32px;margin-bottom:1.5rem}
-.gate-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  color:var(--dark);margin-bottom:.35rem}
-.gate-sub{font-size:11px;color:var(--mid);margin-bottom:2rem}
-.gate-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--light);margin-bottom:.5rem}
+/* PASSWORD GATE */
+#gate{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:9999}
+.gate-box{background:#fff;width:380px;max-width:90vw;padding:2.5rem}
+.gate-stripe{height:3px;background:var(--blue);margin-bottom:2rem}
+.gate-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dark);margin-bottom:.3rem}
+.gate-sub{font-size:11px;color:var(--light);margin-bottom:2rem}
+.gate-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-bottom:.5rem}
 .gate-input{width:100%;border:none;border-bottom:1px solid var(--rule);padding:.6rem 0;
-  font-size:12px;font-family:inherit;outline:none;color:var(--dark);
-  transition:border-color .2s;letter-spacing:.05em}
+  font-size:12px;font-family:inherit;outline:none;color:var(--dark);transition:border-color .2s}
 .gate-input:focus{border-bottom-color:var(--blue)}
 .gate-btn{margin-top:1.5rem;font-size:9px;font-weight:700;letter-spacing:2px;
   text-transform:uppercase;background:var(--dark);color:#fff;border:none;
-  padding:.65rem 1.5rem;cursor:pointer;transition:background .2s}
+  padding:.7rem 1.75rem;cursor:pointer;transition:background .2s}
 .gate-btn:hover{background:var(--blue)}
-.gate-error{font-size:10px;color:#b84040;margin-top:.75rem;display:none}
-.gate-hint{font-size:9px;color:var(--light);margin-top:1.5rem;letter-spacing:.5px}
-.gate-hint code{font-family:monospace;font-size:9px}
+.gate-err{font-size:10px;color:#b84040;margin-top:.6rem;display:none}
+
+/* FOOTER */
+footer{border-top:1px solid var(--rule);padding:1.25rem 2rem;display:flex;
+  align-items:center;justify-content:space-between;background:var(--surface);margin-top:3rem}
+.ft-l{font-size:9px;color:var(--light);letter-spacing:1.5px;text-transform:uppercase}
+.ft-r{font-size:9px;color:var(--light)}
 
 @media(max-width:640px){
-  .hd{padding:0 1rem}
-  .main{padding:1.5rem 1rem}
+  .hd,.main,footer{padding-left:1rem;padding-right:1rem}
   .tabs{padding:0 1rem}
   .hd-search{display:none}
-  footer{padding:1rem}
 }
-</style>
-<style>
-.chip-hidden{opacity:.35;text-decoration:line-through}
 </style>
 </head>
 <body>
 
-<!-- PASSWORD GATE -->
 <div id="gate">
-  <div class="gate-inner">
-    <div class="gate-rule"></div>
+  <div class="gate-box">
+    <div class="gate-stripe"></div>
     <div class="gate-title">NLCS Jeju</div>
-    <div class="gate-sub">Computer Science — Staff Access</div>
-    <div class="gate-label">Password</div>
-    <input type="password" class="gate-input" id="pwInput"
-      placeholder="Enter password"
+    <div class="gate-sub">Computer Science &mdash; Staff Access</div>
+    <div class="gate-lbl">Password</div>
+    <input type="password" class="gate-input" id="pwInput" placeholder="Enter staff password"
       onkeydown="if(event.key==='Enter')checkPw()">
-    <div class="gate-error" id="pwError">Incorrect password</div>
+    <div class="gate-err" id="pwErr">Incorrect password &mdash; please try again</div>
     <button class="gate-btn" onclick="checkPw()">Sign in</button>
-    <div class="gate-hint">Password set in <code>STAFF_PASSWORD</code></div>
   </div>
 </div>
 
@@ -198,47 +163,41 @@ footer{border-top:0.5px solid var(--rule);padding:1rem 2rem;
     <div class="hd-sep"></div>
     <div class="hd-dept">Computer Science</div>
     <div class="hd-right">
-      <div class="hd-search">
-        <input type="text" id="searchInput" placeholder="Search resources">
-      </div>
-      <span class="staff-badge">Staff View</span>
-      <a href="index.html" class="hd-action">Student site ↗</a>
+      <div class="hd-search"><input type="text" id="searchInput" placeholder="Search resources"></div>
+      <span class="staff-pill">Staff View</span>
+      <a href="index.html" class="hd-link">Student site &#8599;</a>
     </div>
   </div>
-  <div class="blue-rule"></div>
+  <div class="blue-bar"></div>
 </header>
-
-<div class="tabs-wrap" style="display:none" id="tabsWrap">
+<div class="tabs-bar" style="display:none" id="tabsBar">
   <div class="tabs" id="yearTabs"></div>
 </div>
-
 <div class="main" id="mainContent" style="display:none">
-  <div class="loading" id="loadingEl">Loading resources&nbsp;&nbsp;&mdash;</div>
+  <div class="loading" id="loadingEl">Loading &#8212;</div>
 </div>
-
 <footer style="display:none" id="siteFooter">
-  <div class="ft-left">CS Department Hub — Staff View</div>
-  <div class="ft-right" id="lastUpdated"></div>
+  <div class="ft-l">CS Department &mdash; NLCS Jeju &mdash; Staff View</div>
+  <div class="ft-r" id="lastUpdated"></div>
 </footer>
 
 <script>
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVhR-gF88rl6ypPYwGkAlbK_jau3Qi9cnBHXd8eSMrMPbkxaThDD95jrBuj-wDoHRy4pQ9yrE5bP92/pub?gid=1154145124&single=true&output=csv';
-const STAFF_PASSWORD = 'cs-staff-2025';
-
+const SHEET_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQVhR-gF88rl6ypPYwGkAlbK_jau3Qi9cnBHXd8eSMrMPbkxaThDD95jrBuj-wDoHRy4pQ9yrE5bP92/pub?gid=1154145124&single=true&output=csv';
+const STAFF_PASSWORD='cs-staff-2025';
 function checkPw(){
   if(document.getElementById('pwInput').value===STAFF_PASSWORD){
     document.getElementById('gate').style.display='none';
     document.getElementById('siteHeader').style.display='';
-    document.getElementById('tabsWrap').style.display='';
+    document.getElementById('tabsBar').style.display='';
     document.getElementById('mainContent').style.display='';
     document.getElementById('siteFooter').style.display='';
     loadSheet(SHEET_URL,true);
   }else{
-    document.getElementById('pwError').style.display='block';
+    document.getElementById('pwErr').style.display='block';
     document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
   }
 }
-
 
 const YEAR_ORDER=['Year 5','Year 6','Year 7','Year 8','Year 9','iGCSE','IB'];
 const KS=new Set(['Year 5','Year 6','Year 7','Year 8','Year 9']);
@@ -258,7 +217,7 @@ function normaliseHeader(h){
 }
 
 function parseCSV(text){
-  function fullParse(txt){
+  function full(txt){
     const rows=[];let row=[],cur='',inQ=false;
     for(let i=0;i<txt.length;i++){
       const ch=txt[i];
@@ -272,29 +231,30 @@ function parseCSV(text){
     if(cur||row.length)rows.push([...row,cur.trim()]);
     return rows;
   }
-  const allRows=fullParse(text);
-  let headerIdx=0;
-  for(let i=0;i<Math.min(allRows.length,10);i++){
-    if(allRows[i].some(c=>c.toLowerCase().includes('year group'))){headerIdx=i;break;}
+  const all=full(text);
+  let hi=0;
+  for(let i=0;i<Math.min(all.length,10);i++){
+    if(all[i].some(c=>c.toLowerCase().includes('year group'))){hi=i;break;}
   }
-  const headers=allRows[headerIdx].map(h=>normaliseHeader(h.replace(/\n/g,' ')));
-  return allRows.slice(headerIdx+1).map(row=>{
-    const r={};headers.forEach((h,i)=>r[h]=(row[i]||''));return r;
+  const hdrs=all[hi].map(h=>normaliseHeader(h.replace(/\n/g,' ')));
+  return all.slice(hi+1).map(row=>{
+    const r={};hdrs.forEach((h,i)=>r[h]=(row[i]||''));return r;
   }).filter(r=>r['Year Group']&&r['Topic']);
 }
 
-function buildTree(rows,teacherView){
+function buildTree(rows,tv){
   const tree={};
   rows.forEach(r=>{
     const yg=r['Year Group'],topic=r['Topic'],sub=r['Subtopic']||'',
       lesson=r['Lesson']||'',title=r['Resource Title'],link=r['Link'],
       type=r['Type']||'Link',
-      show=/^(true|yes|1)$/i.test((r['Show to Students']||'').trim());
+      show=/^(true|yes|1)$/i.test((r['Show to Students']||'').trim()),
+      notes=r['Notes']||'';
     if(!title||!link||link==='#') return;
-    if(!teacherView&&!show) return;
+    if(!tv&&!show) return;
     if(!tree[yg])tree[yg]={};
     if(!tree[yg][topic])tree[yg][topic]={};
-    const res={title,link,type,show};
+    const res={title,link,type,show,notes};
     if(KS.has(yg)){
       const les=lesson||'Resources';
       if(!tree[yg][topic][les])tree[yg][topic][les]=[];
@@ -310,37 +270,34 @@ function buildTree(rows,teacherView){
   return tree;
 }
 
-function chipClass(t){
+function cc(t){
   const m={video:'chip-video',slides:'chip-slides',ppt:'chip-slides',
     doc:'chip-doc',document:'chip-doc',quiz:'chip-quiz',
     worksheet:'chip-worksheet',code:'chip-code',link:'chip-link'};
   return m[(t||'').toLowerCase()]||'chip-link';
 }
 
-function chipHTML(r,teacherView){
+function chip(r,tv){
   const hidden=!r.show;
-  const cls='chip '+chipClass(r.type)+(hidden&&teacherView?' chip-hidden':'');
-  const badge=hidden&&teacherView?' <span class="hidden-badge">Hidden</span>':'';
+  const cls='chip '+cc(r.type)+(hidden&&tv?' chip-hidden':'');
+  const badge=hidden&&tv?' <span class="hidden-badge">Hidden</span>':'';
+  const tip=r.notes?` title="${r.notes}"`:'';
   if(!r.link||r.link==='#') return `<span class="${cls}">${r.title}</span>${badge}`;
-  return `<a href="${r.link}" target="_blank" rel="noopener" class="${cls}" title="${r.notes||r.title}">${r.title}</a>${badge}`;
+  return `<a href="${r.link}" target="_blank" rel="noopener" class="${cls}"${tip}>${r.title}</a>${badge}`;
 }
 
 function slug(s){return(s||'').replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,50);}
 
-function renderSite(rows,teacherView){
+function renderSite(rows,tv){
   const main=document.getElementById('mainContent');
   const tabsEl=document.getElementById('yearTabs');
   main.innerHTML='';tabsEl.innerHTML='';
-
   const srDiv=document.createElement('div');
   srDiv.className='search-results';srDiv.id='searchResults';
   main.appendChild(srDiv);
-
-  const tree=buildTree(rows,teacherView);
+  const tree=buildTree(rows,tv);
   const years=YEAR_ORDER.filter(y=>tree[y]);
-  if(!years.length){
-    main.innerHTML+='<div class="loading">No resources found</div>';return;
-  }
+  if(!years.length){main.innerHTML+='<div class="loading">No resources found</div>';return;}
 
   years.forEach((yg,i)=>{
     const btn=document.createElement('button');
@@ -352,93 +309,66 @@ function renderSite(rows,teacherView){
 
   years.forEach((yg,i)=>{
     const topics=tree[yg];
-    const topicCount=Object.keys(topics).length;
-    const resCount=rows.filter(r=>r['Year Group']===yg&&r['Link']&&r['Link']!=='#'
-      &&(teacherView||/^(true|yes|1)$/i.test((r['Show to Students']||'').trim()))).length;
-    const hiddenCount=teacherView?rows.filter(r=>r['Year Group']===yg
+    const rc=rows.filter(r=>r['Year Group']===yg&&r['Link']&&r['Link']!=='#'
+      &&(tv||/^(true|yes|1)$/i.test((r['Show to Students']||'').trim()))).length;
+    const hc=tv?rows.filter(r=>r['Year Group']===yg
       &&!/^(true|yes|1)$/i.test((r['Show to Students']||'').trim())
       &&r['Link']&&r['Link']!=='#').length:0;
-
     const sec=document.createElement('div');
     sec.className='yr-section'+(i===0?' active':'');
     sec.id='sec_'+slug(yg);
-
-    let statsText=topicCount+' topics · '+resCount+' resources';
-    if(teacherView&&hiddenCount) statsText+=' · '+hiddenCount+' hidden';
-
     sec.innerHTML=`<div class="sec-head">
       <div class="sec-title">${yg}</div>
-      ${teacherView?'<span class="staff-badge">Staff View</span>':''}
-      <div class="sec-stats">${statsText}</div>
-    </div>
-    <div class="topics" id="topics_${slug(yg)}"></div>`;
+      <div class="sec-stats">${Object.keys(topics).length} topics &middot; ${rc} resources${tv&&hc?`<span class="sec-hidden">&middot; ${hc} hidden</span>`:''}</div>
+    </div><div class="topics-list" id="tl_${slug(yg)}"></div>`;
     main.appendChild(sec);
-
-    const topicsEl=sec.querySelector('.topics');
+    const tl=sec.querySelector('.topics-list');
     const isKS=KS.has(yg);
 
     Object.entries(topics).forEach(([topic,data],ti)=>{
-      const topicEl=document.createElement('div');
-      topicEl.className='topic'+(ti===0?' open':'');
+      const el=document.createElement('div');
+      el.className='topic'+(ti===0?' open':'');
       const tid='t_'+slug(yg+topic);
-
-      let resCount2=0;
-      let bodyHTML='';
-
+      let rc2=0,body='';
       if(isKS){
-        // Y5-9: topic → lesson → chips
-        bodyHTML='<div class="lessons">';
-        Object.entries(data).forEach(([lesson,resources])=>{
-          resCount2+=resources.length;
-          bodyHTML+=`<div class="lesson">
-            <div class="lesson-name">${lesson}</div>
-            <div class="chips">${resources.map(r=>chipHTML(r,teacherView)).join('')}</div>
-          </div>`;
+        body='<div class="lessons">';
+        Object.entries(data).forEach(([les,res])=>{
+          rc2+=res.length;
+          body+=`<div class="lesson"><div class="lesson-name">${les}</div>
+            <div class="chips">${res.map(r=>chip(r,tv)).join('')}</div></div>`;
         });
-        bodyHTML+='</div>';
+        body+='</div>';
       } else {
-        // iGCSE/IB: topic → subtopic → lesson → chips
-        bodyHTML='<div class="subtopics">';
+        body='<div class="subtopics">';
         Object.entries(data).forEach(([sub,lessons],si)=>{
-          const subId='s_'+slug(yg+topic+sub);
-          const subRes=Object.values(lessons).flat();
-          resCount2+=subRes.length;
-          bodyHTML+=`<div class="subtopic${si===0?' open':''}" id="${subId}">
-            <div class="sub-hd" onclick="toggleSub('${subId}')">
-              <div class="sub-name">${sub}</div>
-              <div class="sub-arrow">▸</div>
-            </div>
-            <div class="sub-lessons">`;
-          Object.entries(lessons).forEach(([lesson,resources])=>{
-            bodyHTML+=`<div class="sub-lesson">
-              <div class="sub-lesson-name">${lesson}</div>
-              <div class="chips">${resources.map(r=>chipHTML(r,teacherView)).join('')}</div>
-            </div>`;
+          const sid='s_'+slug(yg+topic+sub);
+          Object.values(lessons).forEach(a=>rc2+=a.length);
+          body+=`<div class="subtopic${si===0?' open':''}" id="${sid}">
+            <div class="sub-hd" onclick="toggleSub('${sid}')">
+              <div class="sub-name">${sub}</div><div class="sub-arrow">▸</div>
+            </div><div class="sub-lessons">`;
+          Object.entries(lessons).forEach(([les,res])=>{
+            body+=`<div class="sub-lesson"><div class="sub-lesson-name">${les}</div>
+              <div class="chips">${res.map(r=>chip(r,tv)).join('')}</div></div>`;
           });
-          bodyHTML+='</div></div>';
+          body+='</div></div>';
         });
-        bodyHTML+='</div>';
+        body+='</div>';
       }
-
-      topicEl.innerHTML=`<div class="topic-hd" onclick="toggleTopic('${tid}')">
+      el.innerHTML=`<div class="topic-hd" onclick="toggleTopic('${tid}')">
         <div class="topic-name">${topic}</div>
-        <div class="topic-meta">${resCount2} resources</div>
-        <div class="topic-chevron">▸</div>
-      </div>${bodyHTML}`;
-      topicEl.id=tid;
-      topicsEl.appendChild(topicEl);
+        <div class="topic-count">${rc2} resources</div>
+        <div class="topic-arrow">&#9658;</div>
+      </div>${body}`;
+      el.id=tid;tl.appendChild(el);
     });
   });
-
-  document.getElementById('lastUpdated').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('lastUpdated').textContent=
+    new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
 }
 
-function toggleTopic(id){
-  const el=document.getElementById(id);if(el)el.classList.toggle('open');
-}
-function toggleSub(id){
-  const el=document.getElementById(id);if(el)el.classList.toggle('open');
-}
+function toggleTopic(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function toggleSub(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
 function switchYear(yg){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.year===yg));
   document.querySelectorAll('.yr-section').forEach(s=>s.classList.toggle('active',s.id==='sec_'+slug(yg)));
@@ -446,39 +376,37 @@ function switchYear(yg){
   document.getElementById('searchInput').value='';
 }
 
-function initSearch(rows,teacherView){
+function initSearch(rows,tv){
   document.getElementById('searchInput').addEventListener('input',function(){
     const q=this.value.trim().toLowerCase();
     const sr=document.getElementById('searchResults');
     if(!q){sr.classList.remove('active');return;}
     sr.classList.add('active');
     const hits=rows.filter(r=>{
-      if(!teacherView&&!/^(true|yes|1)$/i.test((r['Show to Students']||'').trim()))return false;
+      if(!tv&&!/^(true|yes|1)$/i.test((r['Show to Students']||'').trim()))return false;
       if(!r['Link']||r['Link']==='#')return false;
-      return['Resource Title','Topic','Subtopic','Lesson','Year Group']
-        .some(k=>(r[k]||'').toLowerCase().includes(q));
+      return['Resource Title','Topic','Subtopic','Lesson','Year Group'].some(k=>(r[k]||'').toLowerCase().includes(q));
     });
-    if(!hits.length){sr.innerHTML='<div style="padding:2rem 0;font-size:10px;color:var(--light);letter-spacing:1px;text-transform:uppercase">No results</div>';return;}
-    sr.innerHTML=`<div style="font-size:9px;color:var(--light);letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem;padding-top:.5rem">${hits.length} result${hits.length!==1?'s':''}</div>`+
+    if(!hits.length){sr.innerHTML='<div style="padding:2rem 0;font-size:9px;color:var(--light);letter-spacing:1.5px;text-transform:uppercase">No results</div>';return;}
+    sr.innerHTML=`<div style="font-size:9px;color:var(--light);letter-spacing:1px;text-transform:uppercase;padding:.75rem 0 1rem">${hits.length} result${hits.length!==1?'s':''}</div>`+
       hits.map(r=>{
-        const hidden=teacherView&&!/^(true|yes|1)$/i.test((r['Show to Students']||'').trim());
+        const hidden=tv&&!/^(true|yes|1)$/i.test((r['Show to Students']||'').trim());
         return`<div class="sr-item">
-          <a href="${r['Link']}" target="_blank" rel="noopener" class="chip ${chipClass(r['Type']||'link')}">${r['Resource Title']}</a>
+          <a href="${r['Link']}" target="_blank" rel="noopener" class="chip ${cc(r['Type']||'link')}">${r['Resource Title']}</a>
           ${hidden?'<span class="hidden-badge">Hidden</span>':''}
-          <div class="sr-meta">${r['Year Group']}${r['Topic']?' · '+r['Topic']:''}${r['Lesson']?' · '+r['Lesson']:''}</div>
+          <div class="sr-meta">${r['Year Group']}${r['Topic']?' &middot; '+r['Topic']:''}${r['Lesson']?' &middot; '+r['Lesson']:''}</div>
         </div>`;
       }).join('');
   });
 }
 
-async function loadSheet(url,teacherView){
+async function loadSheet(url,tv){
   try{
     const resp=await fetch(url+'&t='+Date.now());
-    const text=await resp.text();
-    const rows=parseCSV(text);
+    const rows=parseCSV(await resp.text());
     document.getElementById('loadingEl').style.display='none';
-    renderSite(rows,teacherView);
-    initSearch(rows,teacherView);
+    renderSite(rows,tv);
+    initSearch(rows,tv);
   }catch(e){
     document.getElementById('loadingEl').textContent='Could not load resources. '+e.message;
   }
